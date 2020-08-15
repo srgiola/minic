@@ -1,0 +1,12 @@
+C:\Users\srgio\Documents\Programas Visual Studio\minic\bin\Debug\netcoreapp3.1\minic.exe
+C:\Users\srgio\Documents\Programas Visual Studio\minic\bin\Debug\netcoreapp3.1\minic.deps.json
+C:\Users\srgio\Documents\Programas Visual Studio\minic\bin\Debug\netcoreapp3.1\minic.runtimeconfig.json
+C:\Users\srgio\Documents\Programas Visual Studio\minic\bin\Debug\netcoreapp3.1\minic.runtimeconfig.dev.json
+C:\Users\srgio\Documents\Programas Visual Studio\minic\bin\Debug\netcoreapp3.1\minic.dll
+C:\Users\srgio\Documents\Programas Visual Studio\minic\bin\Debug\netcoreapp3.1\minic.pdb
+C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\minic.AssemblyInfoInputs.cache
+C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\minic.AssemblyInfo.cs
+C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\minic.csproj.CoreCompileInputs.cache
+C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\minic.dll
+C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\minic.pdb
+C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\minic.genruntimeconfig.cache

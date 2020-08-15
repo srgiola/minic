@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minic", "minic.csproj", "{5AD714F5-50AB-49D0-9281-5AB2F11181B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5AD714F5-50AB-49D0-9281-5AB2F11181B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD714F5-50AB-49D0-9281-5AB2F11181B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD714F5-50AB-49D0-9281-5AB2F11181B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD714F5-50AB-49D0-9281-5AB2F11181B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B1C9309F-6FC3-4081-AC78-D28DA0B2C27E}
+	EndGlobalSection
+EndGlobal
