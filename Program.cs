@@ -5,12 +5,12 @@ namespace minic
 {
 	class Program
 	{
-		static void Main()
+		static void Main(string[] args)
 		{
-			Console.WriteLine("Ingrese la dirección de su archivo");
+			Console.WriteLine("Ingrese arrastre su archivo");
 			string file = Console.ReadLine();
 			//string file = "C:\\Users\\srgio\\Desktop\\Ejemplo.frag";
-			//string file = "";
+			//string file = "C";
 			if (!File.Exists(file))
 				Console.WriteLine("El archivo no existe");
 			else
