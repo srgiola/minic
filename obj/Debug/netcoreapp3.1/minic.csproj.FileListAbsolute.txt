@@ -10,3 +10,4 @@ C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\m
 C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\minic.dll
 C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\minic.pdb
 C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\minic.genruntimeconfig.cache
+C:\Users\srgio\Documents\Programas Visual Studio\minic\obj\Debug\netcoreapp3.1\minic.csprojAssemblyReference.cache
