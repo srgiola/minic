@@ -42,11 +42,23 @@ namespace minic
 					//Asi evita las lineas en blanco
 					if (!String.IsNullOrEmpty(linea))
 					{
+						// (\w) --> Cualquier tipo de palabra
+						// (\s) --> Caracteres de escape
 						//Regex.Match busca solo las coincidencias con la ER
-						Regex BuscadorComentarios = new Regex(@"//((\w)|(\s)|[a-zA-Z]|[0-9])+");
-						Regex BuscadorIdentificadores = new Regex(@"([_]|[a-zA-Z]){1}([a-zA-Z]|[_]|[0-9])*");
-						var match = BuscadorComentarios.Match(linea);
-						//var match = BuscadorIdentificadores.Match(linea);
+						//Jerarquia de la ER
+						//1)Comentarios de linea	  //((\w)|(\s)|(\p{P})|(\p{S}))+
+						//2)Numeros
+						//	2.1)Numeros Exponenciales ([0-9]+[.][0-9]*(E|e)[+]?[0-9]+){1,31}
+						//	2.2)Numeros Hexadecimales (0(x|X)([0-9]|[a-fA-F])+){1,31}
+						//	2.3)Numeros Flotantes	  ([0-9]+[.][0-9]+){1,31}
+						//	2.4)Numeros enteros		  ([0-9]+){1,31}
+						//3)String					  (""((\w)|(\s)|(\p{P})|(\p{S}))+""){1,31}
+						//4)Identificadores			  [a-zA-Z]{1}((\w)|[_])+){0,31}
+						//5)Operadores
+						//	5.1)Operadores L1		  [()]|[{}]|[\[\]] --> Haberiguar por que no funciona esto
+						//	5.2)Operadores L2		  ([+]|[-]|[*]|[/]|[%]|<=|>=|<|>|==|!=|=|&&|[||]|!|;|,|[.]|[[]|[]]|[(]|[)]|{|})
+						Regex ER = new Regex(@"(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)[+]?[0-9]+){1,31}|(0(x|X)([0-9]|[a-fA-F])+){1,31}|([0-9]+[.][0-9]+){1,31}|([0-9]+){1,31})|(""((\w)|(\s)|(\p{P})|(\p{S}))+""){1,31}|([a-zA-Z]{1}(([\w]|[_])+){0,30})|(({.})|(\(.\)))|([+]|[-]|[*]|[/]|[%]|<=|>=|<|>|==|!=|=|&&|[||]|!|;|,|[.]|[[]|[]]|[(]|[)]|{|})");
+						var match = ER.Match(linea);
 						while (match.Success)
 						{
 							Console.WriteLine(linea.Substring(match.Index, match.Length));
