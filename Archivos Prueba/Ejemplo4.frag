@@ -1,0 +1,6 @@
+ifelsevoid
+_9
+_if*f
+conshatumadrevoid
+elseperro
+pitovoidputa
