@@ -20,19 +20,18 @@ namespace minic
 		//2)Numeros
 		//	2.1)Numeros Exponenciales	([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)
 		//	2.2)Numeros Hexadecimales	(0(x|X)([0-9]|[a-fA-F])+)
-		//	2.3)Numeros Flotantes		([0-9]+[.][0-9]+)
-		//	2.4)Numeros enteros			([0-9]+){1,31}
+		//	2.3)Numeros Flotantes		([0-9]+[.][0-9]*)
+		//	2.4)Numeros enteros			([0-9]+)
 		//3)Error string incompleto		(""((\w)|(\s)|(\p{P})|(\p{S}))+)
 		//4)String						(""((\w)|(\s)|(\p{P})|(\p{S}))+"")
 		//5)Identificadores/Reservadas	([a-zA-Z]((\w)|[_])*))
 		//6)Operadores
 		//	6.1)Juntos					[()]|[{}]|[\[\]] --> Se quito de la ER, la solución esta en Analizar()
 		//	6.2)Mas de un caracter		(<=|>=|==|!=|&&|[||])
-		//	6.3)De un caracter			Se reconosen como error 8) y luego se identifican ahi
+		//	6.3)De un caracter			Se reconosen como error 8) y luego se identifican como Operador ya en getTypeToken(string)
 		//7)Error */					([*][/])
 		//8)Caracteres de Error			((\p{P}){1}|(\p{S}){1})
-		Regex ER = new Regex(@"(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]+)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|(""((\w)|(\s)|(\p{P})|(\p{S}))+"")|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
-
+		Regex ER = new Regex(@"(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|(""((\w)|(\s)|(\p{P})|(\p{S}))+"")|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
 
 		//Constructor
 		public AnalizadorLexico(string fileName, string pathFile)
@@ -77,35 +76,68 @@ namespace minic
 						else
 						{
 							var match = ER.Match(linea);
-							string caracter61 = ""; //Si el match resulta en (, [, { se guarda algo
+							string caracter61 = "";
 							while (match.Success)
 							{
-
 								string matchRgx = linea.Substring(match.Index, match.Length);
+								if (matchRgx == "(" || matchRgx == "{" || matchRgx == "[") //Para corregir el error de no aceptar (), [] y {}
+								{
+									if (matchRgx == "(" && linea.Substring(match.Index + 1, 1) == ")")
+									{
+										caracter61 = matchRgx;
+										goto nextMatch;
+									}
+									else if (matchRgx == "{" && linea.Substring(match.Index + 1, 1) == "}")
+									{
+										caracter61 = matchRgx;
+										goto nextMatch;
+									}
+									else if (matchRgx == "[" && linea.Substring(match.Index + 1, 1) == "]")
+									{
+										caracter61 = matchRgx;
+										goto nextMatch;
+									}
+								}
+								else if (caracter61.Length > 0)
+								{
+									matchRgx = caracter61 + matchRgx;
+								}
+
 								string TypeToken = getTypeToken(matchRgx); //Type es la Jerarquia de la ER
-								string TValue = ""; 
-								if (TypeToken == "1") //Quitar esto antes de la entrega final
-									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), "Comentario");
 								if (TypeToken == "2.1" || TypeToken == "2.3")
-									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_DoubleConstant (value = " + TValue + ")"));
+									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_DoubleConstant (value = " + matchRgx + ")"));
 								else if (TypeToken == "2.2" || TypeToken == "2.4")
-									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_IntConstant (value = " + TValue + ")"));
+									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_IntConstant (value = " + matchRgx + ")"));
 								else if (TypeToken == "3")
 									SetOutputLines("", numLinea, 3);
 								else if (TypeToken == "4")
-									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_String (value = " + matchRgx + ")"));
+									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_StringConstant (value = " + matchRgx + ")"));
 								else if (TypeToken == "5")
-								{ 
-									//Poner metodo para evaluar separas una Reservada de un Identificador
+								{
+									if (matchRgx == "true" || matchRgx == "false")
+										SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), "T_BoolConstant (value = " + matchRgx + ")");
+									else
+									{
+										//Poner metodo para evaluar separas una Reservada de un Identificador
+										SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), (""));
+									}
 								}
 								else if (TypeToken == "6")
-									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("'" + matchRgx + "'"));
+								{
+									if (caracter61.Length > 0)
+									{
+										SetOutputLines(matchRgx, numLinea, (match.Index - 1), ((match.Index) + match.Length), ("'" + matchRgx + "'"));
+										caracter61 = "";
+									}
+									else
+										SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("'" + matchRgx + "'"));
+								}
 								else if (matchRgx == "*/") //Este seria el TypeToken = "7"
 									SetOutputLines("", numLinea, 4);
 								else if (TypeToken == "8")
-								{
-									//Poner metodo para evaluar si es Operador o Error
-								}
+									SetOutputLines(matchRgx, numLinea, 2);
+
+								nextMatch:
 								match = match.NextMatch();
 							}
 						}
@@ -115,7 +147,7 @@ namespace minic
 		}
 		private void SetOutputLines(string cadena, int numlinea, int colI, int colF, string T)
 		{
-			string output = cadena + "			" + "linea " + numlinea + " columnas " + colI + "-" + colF + " es " + T;
+			string output = cadena + "				" + "linea " + numlinea + " columnas " + colI + "-" + colF + " es " + T;
 			
 			outputLines.Add(output);
 			Console.WriteLine(output);
@@ -131,17 +163,40 @@ namespace minic
 			else if (ErrorType == 3)
 				output = "*** Cadena sin terminar en linea " + numlinea + " ***";
 			else if (ErrorType == 4)
-				output = "*** '*/' fuera de un comentario en linea " + numlinea;
+				output = "*** '*/' fuera de comentario en linea " + numlinea;
 
 			outputLines.Add(output);
 			Console.WriteLine(output);
 		}
 		private string getTypeToken(string matchRgx) //El numero de retorno representa la jerarquia de la ER
 		{
-			if (matchRgx.Length > 1 && matchRgx.Substring(0, 2) == "//")
-				return "1";
+			Regex rgx21 = new Regex(@"([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)");
+			Regex rgx22 = new Regex(@"(0(x|X)([0-9]|[a-fA-F])+)");
+			Regex rgx23 = new Regex(@"([0-9]+[.][0-9]*)");
+			Regex rgx24 = new Regex(@"([0-9]+)");
+			Regex rgx3 = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))+)");
+			Regex rgx4 = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))+"")");
+			Regex rgx5 = new Regex(@"([a-zA-Z]((\w)|[_])*)");
+			Regex rgx6 = new Regex(@"(<=|>=|==|!=|&&|[||])");
 
-			return "0"; //Si retorna 0 hubo un error
+			if (rgx21.IsMatch(matchRgx))
+				return "2.1";
+			else if (rgx22.IsMatch(matchRgx))
+				return "2.2";
+			else if (rgx23.IsMatch(matchRgx))
+				return "2.3";
+			else if (rgx24.IsMatch(matchRgx))
+				return "2.4";
+			else if (rgx4.IsMatch(matchRgx))
+				return "4";
+			else if (rgx3.IsMatch(matchRgx))
+				return "3";
+			else if (rgx5.IsMatch(matchRgx))
+				return "5";
+			else if (rgx6.IsMatch(matchRgx) || Operadores.Contains(matchRgx))
+				return "6";
+			else
+				return "8";
 		}
 	}
 }
