@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace minic
 {
@@ -63,6 +64,7 @@ namespace minic
 					{
 						if (linea.Length > 1 && linea.Substring(0, 2) == "/*")
 						{
+							//Falta verificar que pasa si el comentario termina en una linea pero esta es tipo */ string hola
 							while (linea.Substring(linea.Length - 2, 2) != "*/") //Evita el contenido de un comentario /* */
 							{
 								linea = reader.ReadLine();
@@ -109,7 +111,7 @@ namespace minic
 								else if (TypeToken == "2.2" || TypeToken == "2.4")
 									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_IntConstant (value = " + matchRgx + ")"));
 								else if (TypeToken == "3")
-									SetOutputLines("", numLinea, 3);
+									SetOutputLines("una cadena", numLinea, 3);
 								else if (TypeToken == "4")
 									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_StringConstant (value = " + matchRgx + ")"));
 								else if (TypeToken == "5")
@@ -118,7 +120,9 @@ namespace minic
 										SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), "T_BoolConstant (value = " + matchRgx + ")");
 									else
 									{
-										//Poner metodo para evaluar separas una Reservada de un Identificador
+										//Poner metodo para separar una Reservada de un Identificador
+										//Metodo que valide que no sea mayor a 31 caracteres
+
 										SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), (""));
 									}
 								}
@@ -147,7 +151,7 @@ namespace minic
 		}
 		private void SetOutputLines(string cadena, int numlinea, int colI, int colF, string T)
 		{
-			string output = cadena + "				" + "linea " + numlinea + " columnas " + colI + "-" + colF + " es " + T;
+			string output = cadena + "		" + "linea " + numlinea + " columnas " + colI + "-" + colF + " es " + T;
 			
 			outputLines.Add(output);
 			Console.WriteLine(output);
@@ -161,7 +165,7 @@ namespace minic
 			else if (ErrorType == 2)
 				output = "*** Error linea " + numlinea + " *** Caracter invalido: '" + cadena + "'";
 			else if (ErrorType == 3)
-				output = "*** Cadena sin terminar en linea " + numlinea + " ***";
+				output = "*** EOF en " + cadena + ", linea " + numlinea + " ***";
 			else if (ErrorType == 4)
 				output = "*** '*/' fuera de comentario en linea " + numlinea;
 
@@ -170,6 +174,7 @@ namespace minic
 		}
 		private string getTypeToken(string matchRgx) //El numero de retorno representa la jerarquia de la ER
 		{
+			Regex rgx1 = new Regex(@"(//((\w)|(\s)|(\p{P})|(\p{S}))+)");
 			Regex rgx21 = new Regex(@"([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)");
 			Regex rgx22 = new Regex(@"(0(x|X)([0-9]|[a-fA-F])+)");
 			Regex rgx23 = new Regex(@"([0-9]+[.][0-9]*)");
@@ -179,7 +184,9 @@ namespace minic
 			Regex rgx5 = new Regex(@"([a-zA-Z]((\w)|[_])*)");
 			Regex rgx6 = new Regex(@"(<=|>=|==|!=|&&|[||])");
 
-			if (rgx21.IsMatch(matchRgx))
+			if (rgx1.IsMatch(matchRgx))
+				return "";
+			else if (rgx21.IsMatch(matchRgx))
 				return "2.1";
 			else if (rgx22.IsMatch(matchRgx))
 				return "2.2";

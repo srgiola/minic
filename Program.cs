@@ -7,10 +7,10 @@ namespace minic
 	{
 		static void Main(string[] args)
 		{
+			//Falta generar EXE
+			// y comentarios multilinea
 			Console.WriteLine("Arrastre su archivo a la consola");
 			string pathfile = Console.ReadLine();
-			//string file = "C:\\Users\\srgio\\Desktop\\Ejemplo.frag";
-			//string file = "C";
 			if (!File.Exists(pathfile))
 				Console.WriteLine("El archivo no existe");
 			//Poner un if que no deje iniciar si el archivo esta vacio
