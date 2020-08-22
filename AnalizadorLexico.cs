@@ -19,10 +19,10 @@ namespace minic
 		//Jerarquia de la ER
 		//1)Comentarios de linea		(//((\w)|(\s)|(\p{P})|(\p{S}))+)
 		//2)Numeros
-		//	2.1)Numeros Exponenciales	^([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)$
-		//	2.2)Numeros Hexadecimales	^(0(x|X)([0-9]|[a-fA-F])+)$
-		//	2.3)Numeros Flotantes		^([0-9]+[.][0-9]*)$
-		//	2.4)Numeros enteros			^([0-9]+)$
+		//	2.1)Numeros Exponenciales	([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)
+		//	2.2)Numeros Hexadecimales	(0(x|X)([0-9]|[a-fA-F])+)
+		//	2.3)Numeros Flotantes		([0-9]+[.][0-9]*)
+		//	2.4)Numeros enteros			([0-9]+)
 		//3)Error string incompleto		(""((\w)|(\s)|(\p{P})|(\p{S}))+)
 		//4)String						(""((\w)|(\s)|(\p{P})|(\p{S}))+"")
 		//5)Identificadores/Reservadas	([a-zA-Z]((\w)|[_])*))
@@ -32,7 +32,7 @@ namespace minic
 		//	6.3)De un caracter			Se reconosen como error 8) y luego se identifican como Operador ya en getTypeToken(string)
 		//7)Error */					([*][/])
 		//8)Caracteres de Error			((\p{P}){1}|(\p{S}){1})
-		Regex ER = new Regex(@"(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(^([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)$|^(0(x|X)([0-9]|[a-fA-F])+)$|^([0-9]+[.][0-9]*)$|^([0-9]+)$)|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|(""((\w)|(\s)|(\p{P})|(\p{S}))+"")|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
+		Regex ER = new Regex(@"(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|(""((\w)|(\s)|(\p{P})|(\p{S}))+"")|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
 
 		
 		//Constructor
@@ -78,7 +78,7 @@ namespace minic
 						}
 						else
 						{
-							var match = ER.Match(linea);
+							Match match = ER.Match(linea);
 							string caracter61 = "";
 							while (match.Success)
 							{
@@ -129,10 +129,13 @@ namespace minic
 											SetOutputLines(errorTruncado, numLinea, 5);
 											matchRgx = matchRgx.Substring(31, matchRgx.Length - 31);
 										}
-										
-										SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), (""));
+										if(Reservadas.Contains(matchRgx)) //Reconoce las palabras reservadas, siempre y cuendo vengan solamente en el string
+											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_" + matchRgx[0].ToString().ToUpper() + matchRgx.Substring(1, matchRgx.Length - 1))); 
+										else
+											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), (""));
 										
 										//Regex rgx = new Regex(string.Join("|", Reservadas.ToArray()));
+										
 										//MatchCollection mCol = rgx.Matches(matchRgx);
 										//foreach (Match m in mCol)
 										//{
@@ -198,7 +201,6 @@ namespace minic
 			Regex rgx4 = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))+"")");
 			Regex rgx5 = new Regex(@"([a-zA-Z]([\w]|[_])*)");
 			Regex rgx6 = new Regex(@"(<=|>=|==|!=|&&|[||])");
-
 
 			if (rgx1.IsMatch(matchRgx))
 				return "";
