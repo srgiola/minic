@@ -19,10 +19,10 @@ namespace minic
 		//Jerarquia de la ER
 		//1)Comentarios de linea		(//((\w)|(\s)|(\p{P})|(\p{S}))+)
 		//2)Numeros
-		//	2.1)Numeros Exponenciales	([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)
-		//	2.2)Numeros Hexadecimales	(0(x|X)([0-9]|[a-fA-F])+)
-		//	2.3)Numeros Flotantes		([0-9]+[.][0-9]*)
-		//	2.4)Numeros enteros			([0-9]+)
+		//	2.1)Numeros Exponenciales	^([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)$
+		//	2.2)Numeros Hexadecimales	^(0(x|X)([0-9]|[a-fA-F])+)$
+		//	2.3)Numeros Flotantes		^([0-9]+[.][0-9]*)$
+		//	2.4)Numeros enteros			^([0-9]+)$
 		//3)Error string incompleto		(""((\w)|(\s)|(\p{P})|(\p{S}))+)
 		//4)String						(""((\w)|(\s)|(\p{P})|(\p{S}))+"")
 		//5)Identificadores/Reservadas	([a-zA-Z]((\w)|[_])*))
@@ -32,8 +32,9 @@ namespace minic
 		//	6.3)De un caracter			Se reconosen como error 8) y luego se identifican como Operador ya en getTypeToken(string)
 		//7)Error */					([*][/])
 		//8)Caracteres de Error			((\p{P}){1}|(\p{S}){1})
-		Regex ER = new Regex(@"(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|(""((\w)|(\s)|(\p{P})|(\p{S}))+"")|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
+		Regex ER = new Regex(@"(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(^([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)$|^(0(x|X)([0-9]|[a-fA-F])+)$|^([0-9]+[.][0-9]*)$|^([0-9]+)$)|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|(""((\w)|(\s)|(\p{P})|(\p{S}))+"")|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
 
+		
 		//Constructor
 		public AnalizadorLexico(string fileName, string pathFile)
 		{
@@ -120,10 +121,23 @@ namespace minic
 										SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), "T_BoolConstant (value = " + matchRgx + ")");
 									else
 									{
-										//Poner metodo para separar una Reservada de un Identificador
-										//Metodo que valide que no sea mayor a 31 caracteres
-
-										SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), (""));
+										int tmpCol = 0; //Temporal para llevar el control de las columnas eliminadas en el trunqueo
+										while (matchRgx.Length > 31) //Controla los errores de truncado reduciendo la cadena hasta tener menor o igual a logitud a 31
+										{
+											string errorTruncado = matchRgx.Substring(0,31);
+											tmpCol += 31;
+											SetOutputLines(errorTruncado, numLinea, 5);
+											matchRgx = matchRgx.Substring(31, matchRgx.Length - 31);
+										}
+										
+										SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), (""));
+										
+										//Regex rgx = new Regex(string.Join("|", Reservadas.ToArray()));
+										//MatchCollection mCol = rgx.Matches(matchRgx);
+										//foreach (Match m in mCol)
+										//{
+										//	Console.WriteLine(m);
+										//}
 									}
 								}
 								else if (TypeToken == "6")
@@ -151,14 +165,13 @@ namespace minic
 		}
 		private void SetOutputLines(string cadena, int numlinea, int colI, int colF, string T)
 		{
-			string output = cadena + "		" + "linea " + numlinea + " columnas " + colI + "-" + colF + " es " + T;
-			
+			string output = cadena + "		" + "linea " + numlinea + " columnas " + (colI + 1) + "-" + (colF + 1) + " es " + T;
 			outputLines.Add(output);
 			Console.WriteLine(output);
 		}
 		private void SetOutputLines(string cadena, int numlinea, int ErrorType)
 		{
-			//ErrorType 1 = EOF | 2 = Caracter invalido | 3 = String incompleto | 4 = */
+			//ErrorType 1 = EOF | 2 = Caracter invalido | 3 = String incompleto | 4 = */ | 5 = Error de truncado
 			string output = "";
 			if (ErrorType == 1)
 				output = "*** EOF en " + cadena + ", linea " + numlinea + " ***";
@@ -167,7 +180,9 @@ namespace minic
 			else if (ErrorType == 3)
 				output = "*** EOF en " + cadena + ", linea " + numlinea + " ***";
 			else if (ErrorType == 4)
-				output = "*** '*/' fuera de comentario en linea " + numlinea;
+				output = "*** '*/' fuera de comentario en linea " + numlinea + " ***";
+			else if (ErrorType == 5)
+				output = "*** Error de truncado, linea " + numlinea + " *** Identificador truncado hasta: " + cadena;
 
 			outputLines.Add(output);
 			Console.WriteLine(output);
@@ -175,14 +190,15 @@ namespace minic
 		private string getTypeToken(string matchRgx) //El numero de retorno representa la jerarquia de la ER
 		{
 			Regex rgx1 = new Regex(@"(//((\w)|(\s)|(\p{P})|(\p{S}))+)");
-			Regex rgx21 = new Regex(@"([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)");
-			Regex rgx22 = new Regex(@"(0(x|X)([0-9]|[a-fA-F])+)");
-			Regex rgx23 = new Regex(@"([0-9]+[.][0-9]*)");
-			Regex rgx24 = new Regex(@"([0-9]+)");
+			Regex rgx21 = new Regex(@"^([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)$");
+			Regex rgx22 = new Regex(@"^(0(x|X)([0-9]|[a-fA-F])+)$");
+			Regex rgx23 = new Regex(@"^([0-9]+[.][0-9]*)$");
+			Regex rgx24 = new Regex(@"^([0-9]+)$");
 			Regex rgx3 = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))+)");
 			Regex rgx4 = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))+"")");
-			Regex rgx5 = new Regex(@"([a-zA-Z]((\w)|[_])*)");
+			Regex rgx5 = new Regex(@"([a-zA-Z]([\w]|[_])*)");
 			Regex rgx6 = new Regex(@"(<=|>=|==|!=|&&|[||])");
+
 
 			if (rgx1.IsMatch(matchRgx))
 				return "";
