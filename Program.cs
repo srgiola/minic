@@ -13,7 +13,8 @@ namespace minic
 			string pathfile = Console.ReadLine();
 			if (!File.Exists(pathfile))
 				Console.WriteLine("El archivo no existe");
-			//Poner un if que no deje iniciar si el archivo esta vacio
+			else if (new FileInfo(pathfile).Length == 0)
+				Console.WriteLine("El archivo se encuentra vacio");
 			else
 			{
 				// [0] = file name     [1] = file extencion

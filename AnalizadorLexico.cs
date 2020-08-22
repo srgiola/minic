@@ -181,7 +181,7 @@ namespace minic
 															if(siMatch.Length != 0)
 																Console.WriteLine(siMatch);
 															noMatch = "";
-															siMatch = "";
+															siMatch = "";															
 														}
 													}
 												}
