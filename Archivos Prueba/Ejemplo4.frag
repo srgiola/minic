@@ -1,5 +1,5 @@
-identificame_estaperro24otrap31identificame_estaperro24otrap31identificame_estaperro24otrap31identificame_estaperro24otrap31
-if identificame_estaperro24otrap31ide así
 madrevoid
+iteelseso
 elseperro
-pitovoidputa
+x8t_voidpoooa
+if8void //Error

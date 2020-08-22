@@ -129,18 +129,66 @@ namespace minic
 											SetOutputLines(errorTruncado, numLinea, 5);
 											matchRgx = matchRgx.Substring(31, matchRgx.Length - 31);
 										}
-										if(Reservadas.Contains(matchRgx)) //Reconoce las palabras reservadas, siempre y cuendo vengan solamente en el string
-											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_" + matchRgx[0].ToString().ToUpper() + matchRgx.Substring(1, matchRgx.Length - 1))); 
+
+										if (Reservadas.Contains(matchRgx)) //Reconoce las palabras reservadas, siempre y cuendo vengan solamente en el string
+											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_" + matchRgx[0].ToString().ToUpper() + matchRgx.Substring(1, matchRgx.Length - 1)));
 										else
-											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), (""));
-										
-										//Regex rgx = new Regex(string.Join("|", Reservadas.ToArray()));
-										
-										//MatchCollection mCol = rgx.Matches(matchRgx);
-										//foreach (Match m in mCol)
-										//{
-										//	Console.WriteLine(m);
-										//}
+										{
+											//SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), (""));
+											List<string> ReservadasEscondidas = new List<string>();
+											List<int> ColumnasI_RE = new List<int>();
+											List<int> ColumnaF_RE = new List<int>();
+											List<string> identificador = new List<string>();
+
+											Regex rgx = new Regex(string.Join("|", Reservadas.ToArray()));
+											MatchCollection matches = rgx.Matches(matchRgx);
+											foreach (Match pReservada in matches) //Busca y guarda cada palabra reservada que se encuentre dentro de una cadena que podria pasar como identificador
+											{
+												ReservadasEscondidas.Add(pReservada.ToString());
+												ColumnasI_RE.Add(pReservada.Index);
+												ColumnaF_RE.Add(pReservada.Length);
+											}
+
+											if (ReservadasEscondidas.Count > 0)
+											{
+												string noMatch = "";
+												string siMatch = "";
+												int indexMatch = 0;
+												int indexLista = 0;
+												for (int i = 0; i < matchRgx.Length; i++)
+												{
+													if (indexLista >= ReservadasEscondidas.Count)
+													{ 
+														Console.WriteLine(matchRgx.Substring((i), (matchRgx.Length - i)));
+														break;
+													}
+													else
+													{
+														if (matchRgx[i] != ReservadasEscondidas[indexLista][indexMatch])
+															noMatch += matchRgx[i];
+														else
+														{
+															siMatch += matchRgx[i];
+															indexMatch++;
+														}
+														if (siMatch == ReservadasEscondidas[0])
+														{
+															//ReservadasEscondidas.RemoveAt(0);
+															indexMatch = 0;
+															indexLista++;
+															if(noMatch.Length != 0)
+																Console.WriteLine(noMatch);
+															if(siMatch.Length != 0)
+																Console.WriteLine(siMatch);
+															noMatch = "";
+															siMatch = "";
+														}
+													}
+												}
+											}
+											else //Si la cuenta es menor que cero, significa que no hay niguna palabra reservada en la cadena
+												SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_Idetifier"));
+										}
 									}
 								}
 								else if (TypeToken == "6")
