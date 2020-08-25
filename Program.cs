@@ -19,7 +19,7 @@ namespace minic
 			{
 				// [0] = file name     [1] = file extencion
 				string[] fileParts = Path.GetFileName(pathfile).Split('.');
-				if (!(fileParts[1] == "frag"))
+				if (!(fileParts[1] == "frag") && !(fileParts[1] == "txt"))
 					Console.WriteLine("El archivo debe tener una extención valida");
 				else
 				{

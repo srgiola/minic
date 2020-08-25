@@ -17,14 +17,14 @@ namespace minic
 		List<string> Tokens { get; set; }
 		List<string> outputLines { get; set; }
 		//Jerarquia de la ER
-		//1)Comentarios de linea		(//((\w)|(\s)|(\p{P})|(\p{S}))+)
-		//2)Numeros
-		//	2.1)Numeros Exponenciales	([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)
-		//	2.2)Numeros Hexadecimales	(0(x|X)([0-9]|[a-fA-F])+)
-		//	2.3)Numeros Flotantes		([0-9]+[.][0-9]*)
-		//	2.4)Numeros enteros			([0-9]+)
-		//3)Error string incompleto		(""((\w)|(\s)|(\p{P})|(\p{S}))+)
-		//4)String						(""((\w)|(\s)|(\p{P})|(\p{S}))+"")
+		//1)String						(""((\w)|(\s)|(\p{P})|(\p{S}))+"")
+		//2)Comentarios de linea		(//((\w)|(\s)|(\p{P})|(\p{S}))+)
+		//3)Numeros
+		//	3.1)Numeros Exponenciales	([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)
+		//	3.2)Numeros Hexadecimales	(0(x|X)([0-9]|[a-fA-F])+)
+		//	3.3)Numeros Flotantes		([0-9]+[.][0-9]*)
+		//	3.4)Numeros enteros			([0-9]+)
+		//4)Error string incompleto		(""((\w)|(\s)|(\p{P})|(\p{S}))+)					
 		//5)Identificadores/Reservadas	([a-zA-Z]((\w)|[_])*))
 		//6)Operadores
 		//	6.1)Juntos					[()]|[{}]|[\[\]] --> Se quito de la ER, la solución esta en Analizar()
@@ -32,7 +32,7 @@ namespace minic
 		//	6.3)De un caracter			Se reconosen como error 8) y luego se identifican como Operador ya en getTypeToken(string)
 		//7)Error */					([*][/])
 		//8)Caracteres de Error			((\p{P}){1}|(\p{S}){1})
-		Regex ER = new Regex(@"(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|(""((\w)|(\s)|(\p{P})|(\p{S}))+"")|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
+		Regex ER = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))+"")|(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
 
 		
 		//Constructor
@@ -65,7 +65,6 @@ namespace minic
 					{
 						if (linea.Length > 1 && linea.Substring(0, 2) == "/*")
 						{
-							//Falta verificar que pasa si el comentario termina en una linea pero esta es tipo */ string hola
 							while (linea.Substring(linea.Length - 2, 2) != "*/") //Evita el contenido de un comentario /* */
 							{
 								linea = reader.ReadLine();
@@ -83,9 +82,12 @@ namespace minic
 							while (match.Success)
 							{
 								string matchRgx = linea.Substring(match.Index, match.Length);
+
 								if (matchRgx == "(" || matchRgx == "{" || matchRgx == "[") //Para corregir el error de no aceptar (), [] y {}
 								{
-									if (matchRgx == "(" && linea.Substring(match.Index + 1, 1) == ")")
+									if (linea.Length > 1 && (match.Index + 1) >= linea.Length)
+									{ }
+									else if (matchRgx == "(" && linea.Substring(match.Index + 1, 1) == ")")
 									{
 										caracter61 = matchRgx;
 										goto nextMatch;
@@ -130,7 +132,7 @@ namespace minic
 											matchRgx = matchRgx.Substring(31, matchRgx.Length - 31);
 										}
 
-										if (Reservadas.Contains(matchRgx)) //Reconoce las palabras reservadas, siempre y cuendo vengan solamente en el string
+										if (Reservadas.Contains(matchRgx)) //Busca las palabras reservadas
 											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_" + matchRgx[0].ToString().ToUpper() + matchRgx.Substring(1, matchRgx.Length - 1)));
 										else
 										{
