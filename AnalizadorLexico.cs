@@ -12,6 +12,7 @@ namespace minic
 	{
 		string fileName { get; set; }
 		string pathFile { get; set; }
+		string pathDirectory { get; set; }
 		List<string> Reservadas { get; set; }
 		List<string> Operadores { get; set; }
 		List<string> Tokens { get; set; }
@@ -27,19 +28,20 @@ namespace minic
 		//4)Error string incompleto		(""((\w)|(\s)|(\p{P})|(\p{S}))+)					
 		//5)Identificadores/Reservadas	([a-zA-Z]((\w)|[_])*))
 		//6)Operadores
-		//	6.1)Juntos					[()]|[{}]|[\[\]] --> Se quito de la ER, la solución esta en Analizar()
-		//	6.2)Mas de un caracter		(<=|>=|==|!=|&&|[||])
-		//	6.3)De un caracter			Se reconosen como error 8) y luego se identifican como Operador ya en getTypeToken(string)
+		//	6.1)De agrupación Juntos	[()]|[{}]|[\[\]] --> Se quito de la ER, la solución esta en Analizar()
+		//	6.2)De comparación			(<=|>=|==|!=|&&|[||])
+		//	6.3)Matematicos				Se reconosen como error 8) y luego se identifican como Operador en getTypeToken(string)
 		//7)Error */					([*][/])
 		//8)Caracteres de Error			((\p{P}){1}|(\p{S}){1})
 		Regex ER = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))+"")|(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
 
 		
 		//Constructor
-		public AnalizadorLexico(string fileName, string pathFile)
+		public AnalizadorLexico(string fileName, string pathFile, string pathDirectory)
 		{
 			this.fileName = fileName;
 			this.pathFile = pathFile;
+			this.pathDirectory = pathDirectory;
 			Reservadas = new List<string>();
 			Operadores = new List<string>();
 			outputLines = new List<string>();
@@ -135,62 +137,8 @@ namespace minic
 										if (Reservadas.Contains(matchRgx)) //Busca las palabras reservadas
 											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_" + matchRgx[0].ToString().ToUpper() + matchRgx.Substring(1, matchRgx.Length - 1)));
 										else
-										{
-											//SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), (""));
-											List<string> ReservadasEscondidas = new List<string>();
-											List<int> ColumnasI_RE = new List<int>();
-											List<int> ColumnaF_RE = new List<int>();
-											List<string> identificador = new List<string>();
-
-											Regex rgx = new Regex(string.Join("|", Reservadas.ToArray()));
-											MatchCollection matches = rgx.Matches(matchRgx);
-											foreach (Match pReservada in matches) //Busca y guarda cada palabra reservada que se encuentre dentro de una cadena que podria pasar como identificador
-											{
-												ReservadasEscondidas.Add(pReservada.ToString());
-												ColumnasI_RE.Add(pReservada.Index);
-												ColumnaF_RE.Add(pReservada.Length);
-											}
-
-											if (ReservadasEscondidas.Count > 0)
-											{
-												string noMatch = "";
-												string siMatch = "";
-												int indexMatch = 0;
-												int indexLista = 0;
-												for (int i = 0; i < matchRgx.Length; i++)
-												{
-													if (indexLista >= ReservadasEscondidas.Count)
-													{ 
-														Console.WriteLine(matchRgx.Substring((i), (matchRgx.Length - i)));
-														break;
-													}
-													else
-													{
-														if (matchRgx[i] != ReservadasEscondidas[indexLista][indexMatch])
-															noMatch += matchRgx[i];
-														else
-														{
-															siMatch += matchRgx[i];
-															indexMatch++;
-														}
-														if (siMatch == ReservadasEscondidas[0])
-														{
-															//ReservadasEscondidas.RemoveAt(0);
-															indexMatch = 0;
-															indexLista++;
-															if(noMatch.Length != 0)
-																Console.WriteLine(noMatch);
-															if(siMatch.Length != 0)
-																Console.WriteLine(siMatch);
-															noMatch = "";
-															siMatch = "";															
-														}
-													}
-												}
-											}
-											else //Si la cuenta es menor que cero, significa que no hay niguna palabra reservada en la cadena
-												SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_Idetifier"));
-										}
+											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_Idetifier"));
+											//Si la cuenta es menor que cero, significa que no hay niguna palabra reservada en la cadena
 									}
 								}
 								else if (TypeToken == "6")
@@ -215,12 +163,17 @@ namespace minic
 					}
 				}
 			}
+			using (StreamWriter writer = new StreamWriter(pathDirectory + fileName + ".out"))
+			{
+				foreach (string linea in outputLines)
+					writer.WriteLine(linea);
+			}
 		}
 		private void SetOutputLines(string cadena, int numlinea, int colI, int colF, string T)
 		{
 			string output = cadena + "		" + "linea " + numlinea + " columnas " + (colI + 1) + "-" + (colF + 1) + " es " + T;
 			outputLines.Add(output);
-			Console.WriteLine(output);
+			//Console.WriteLine(output);
 		}
 		private void SetOutputLines(string cadena, int numlinea, int ErrorType)
 		{

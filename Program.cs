@@ -19,13 +19,9 @@ namespace minic
 			{
 				// [0] = file name     [1] = file extencion
 				string[] fileParts = Path.GetFileName(pathfile).Split('.');
-				if (!(fileParts[1] == "frag") && !(fileParts[1] == "txt"))
-					Console.WriteLine("El archivo debe tener una extención valida");
-				else
-				{
-					AnalizadorLexico ALexico = new AnalizadorLexico(fileParts[0], pathfile);
-					ALexico.Analizar();
-				}
+				string pathDirectory = pathfile.Replace(Path.GetFileName(pathfile), "");
+				AnalizadorLexico ALexico = new AnalizadorLexico(fileParts[0], pathfile, pathDirectory);
+				ALexico.Analizar();
 			}
 			Console.ReadKey();
 		}
