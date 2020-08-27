@@ -1,6 +1,3 @@
-	{}
-string tmp = "";
-for(int i = 0;i<linea.lenght;i++)
 {
 	if(Posee_Match(tmp + linea[i]) == true)
 	{
