@@ -18,7 +18,7 @@ namespace minic
 		List<string> Tokens { get; set; }
 		List<string> outputLines { get; set; }
 		//Jerarquia de la ER
-		//1)String						(""((\w)|(\s)|(\p{P})|(\p{S}))+"")
+		//1)String						(""((\w)|(\s)|(\p{P})
 		//2)Comentarios de linea		(//((\w)|(\s)|(\p{P})|(\p{S}))+)
 		//3)Numeros
 		//	3.1)Numeros Exponenciales	([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)
@@ -33,7 +33,7 @@ namespace minic
 		//	6.3)Matematicos				Se reconosen como error 8) y luego se identifican como Operador en getTypeToken(string)
 		//7)Error */					([*][/])
 		//8)Caracteres de Error			((\p{P}){1}|(\p{S}){1})
-		Regex ER = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))+"")|(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
+		Regex ER = new Regex(@"((""(\w)|(\s)|(\p{P})|(\p{S}))+"")|(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)[+]?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
 
 		
 		//Constructor
@@ -84,10 +84,11 @@ namespace minic
 							while (match.Success)
 							{
 								string matchRgx = linea.Substring(match.Index, match.Length);
-
 								if (matchRgx == "(" || matchRgx == "{" || matchRgx == "[") //Para corregir el error de no aceptar (), [] y {}
 								{
-									if (linea.Length > 1 && (match.Index + 1) >= linea.Length)
+									// && (match.Index + 1) >= linea.Length
+									string tmp = linea.Replace("\t", "");
+									if (tmp.Length == 1)
 									{ }
 									else if (matchRgx == "(" && linea.Substring(match.Index + 1, 1) == ")")
 									{
@@ -109,6 +110,15 @@ namespace minic
 								{
 									matchRgx = caracter61 + matchRgx;
 								}
+
+								string tmpComillas = matchRgx.Replace(" ", "");
+								if (tmpComillas.Length == 3 && tmpComillas[1] == '"' && tmpComillas[2] == '"') //Entra cuando viene un operador seguido por un par de comillas 
+								{
+									SetOutputLines(tmpComillas[0].ToString(), numLinea, match.Index, (match.Index + 1), ("'" + tmpComillas[0].ToString() + "'"));
+									matchRgx = "\"\"";
+								}
+								else if (tmpComillas.Length == 2 && tmpComillas[0] == '"' && tmpComillas[1] == '"') //Si viene un identificador/numero seguido por un par de comillas
+									matchRgx = tmpComillas;
 
 								string TypeToken = getTypeToken(matchRgx); //Type es la Jerarquia de la ER
 								if (TypeToken == "2.1" || TypeToken == "2.3")
@@ -137,7 +147,7 @@ namespace minic
 										if (Reservadas.Contains(matchRgx)) //Busca las palabras reservadas
 											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_" + matchRgx[0].ToString().ToUpper() + matchRgx.Substring(1, matchRgx.Length - 1)));
 										else
-											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_Idetifier"));
+											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_Identifier"));
 											//Si la cuenta es menor que cero, significa que no hay niguna palabra reservada en la cadena
 									}
 								}
@@ -156,7 +166,7 @@ namespace minic
 								else if (TypeToken == "8")
 									SetOutputLines(matchRgx, numLinea, 2);
 
-								nextMatch:
+							nextMatch:
 								match = match.NextMatch();
 							}
 						}
@@ -215,6 +225,8 @@ namespace minic
 				return "2.3";
 			else if (rgx24.IsMatch(matchRgx))
 				return "2.4";
+			else if (matchRgx == "\"\"")
+				return "4";
 			else if (rgx4.IsMatch(matchRgx))
 				return "4";
 			else if (rgx3.IsMatch(matchRgx))

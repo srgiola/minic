@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "NDsyZ/HhDMKMK2yEPAiYqWeRAz3s4vsGmp1kypTQG/3Cg2AcUVuzWvF7dbjYsZlGwOvEXN+m0BCmAQD4N5LyJw==",
+  "dgSpecHash": "/26sTuox0RFhk3eTqRvatKRGRAy98bfMzEGXn/E7nJ5m3miD0EtTyN0sykdom2PQQcIfOeSrXw4xwBjUMXyn+Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\srgio\\Documents\\Programas Visual Studio\\minic\\minic.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\srgio\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\3.1.5\\microsoft.netcore.app.runtime.win-x86.3.1.5.nupkg.sha512",
+    "C:\\Users\\srgio\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\3.1.5\\microsoft.windowsdesktop.app.runtime.win-x86.3.1.5.nupkg.sha512",
+    "C:\\Users\\srgio\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\3.1.5\\microsoft.aspnetcore.app.runtime.win-x86.3.1.5.nupkg.sha512"
+  ],
   "logs": []
 }

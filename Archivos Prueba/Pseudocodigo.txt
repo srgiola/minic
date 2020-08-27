@@ -1,0 +1,57 @@
+	{}
+string tmp = "";
+for(int i = 0;i<linea.lenght;i++)
+{
+	if(Posee_Match(tmp + linea[i]) == true)
+	{
+		tmp+= linea[i];
+	}
+	else
+	{
+		if(tmp.lenght >0)
+		{
+			Console.Write(Trae_Match(tmp));
+			tmp = "";
+			if(Posee_Match(tmp + linea[i]) == true)
+			{
+			tmp+= linea[i];
+			}
+			else 
+			{
+
+				if(diferente de \n ó ' ' ó tab)
+				else if(eof) // En of file 
+				else linea[i] //CARATER INVALIDO
+				
+			}
+		}
+		else
+		{
+			linea[i] //CARATER INVALIDO
+		}
+	}
+	
+}
+
+bool Posee_Match(string evaluar)
+{
+if(evaluar.MatchIdentificador)
+	return true;
+else if(evaluar.MatchOperador)
+	return true;
+else if(evaluar.MatchReservada)
+	return true;
+else
+	return false;	
+}
+string Trae_Match(string evaluar)
+{
+if(evaluar.MatchIdentificador)
+	return "Identificador";
+else if(evaluar.MatchOperador)
+	return "Operador";
+else if(evaluar.MatchReservada)
+	return "Reservada";
+else
+	return ""	
+}
