@@ -70,6 +70,7 @@ namespace minic
 							while (linea.Substring(linea.Length - 2, 2) != "*/") //Evita el contenido de un comentario /* */
 							{
 								linea = reader.ReadLine();
+								numLinea++;
 								if (String.IsNullOrEmpty(linea)) //EOF
 								{
 									SetOutputLines("un comentario", numLinea, 1);
@@ -221,7 +222,12 @@ namespace minic
 			Regex rgx5 = new Regex(@"([a-zA-Z]([\w]|[_])*)");
 			Regex rgx6 = new Regex(@"(<=|>=|==|!=|&&|[||])");
 
-			if (rgx1.IsMatch(matchRgx))
+
+			if (rgx4.IsMatch(matchRgx))
+				return "4";
+			else if (rgx3.IsMatch(matchRgx))
+				return "3";
+			else if (rgx1.IsMatch(matchRgx))
 				return "";
 			else if (rgx21.IsMatch(matchRgx))
 				return "2.1";
@@ -233,10 +239,6 @@ namespace minic
 				return "2.4";
 			else if (matchRgx == "\"\"")
 				return "4";
-			else if (rgx4.IsMatch(matchRgx))
-				return "4";
-			else if (rgx3.IsMatch(matchRgx))
-				return "3";
 			else if (rgx5.IsMatch(matchRgx))
 				return "5";
 			else if (rgx6.IsMatch(matchRgx) || Operadores.Contains(matchRgx))
