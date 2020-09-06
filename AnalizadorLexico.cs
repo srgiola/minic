@@ -46,7 +46,8 @@ namespace minic
 			outputLines = new List<string>();
 
 			string[] _Reserverdas = new string[]{"void", "int", "double", "bool", "string", "class", "const", "interface", "null",
-				"this", "for", "while", "foreach", "if", "else", "return", "break", "New", "NewArray", "Console", "WriteLine" };
+				"this", "for", "while", "foreach", "if", "else", "return", "break", "New", "NewArray", "Console", "WriteLine",
+				"Print", "ident"};
 			string[] _Operadores = new string[] { "+", "-", "*", "/", "%", "<", ">", "<=", ">=", "=", "==", "!=",
 				"&&", "||", "!", ";", ",", ".", "{", "}", "{}", "[", "]", "[]", "(", ")", "()" };
 			Reservadas.AddRange(_Reserverdas);
@@ -134,19 +135,26 @@ namespace minic
 									else
 									{
 										int tmpCol = 0; //Temporal para llevar el control de las columnas eliminadas en el trunqueo
-										while (matchRgx.Length > 31) //Controla los errores de truncado reduciendo la cadena hasta tener menor o igual a logitud a 31
-										{
-											string errorTruncado = matchRgx.Substring(0,31);
-											tmpCol += 31;
-											SetOutputLines(errorTruncado, numLinea, 5);
-											matchRgx = matchRgx.Substring(31, matchRgx.Length - 31);
-										}
+										//while (matchRgx.Length > 31) //Controla los errores de truncado reduciendo la cadena hasta tener menor o igual a logitud a 31
+										//{
+										//	string errorTruncado = matchRgx.Substring(0,31);
+										//	tmpCol += 31;
+										//	SetOutputLines(errorTruncado, numLinea, 5);
+										//	matchRgx = matchRgx.Substring(31, matchRgx.Length - 31);
+										//}
 
 										if (Reservadas.Contains(matchRgx)) //Busca las palabras reservadas
 											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_" + matchRgx[0].ToString().ToUpper() + matchRgx.Substring(1, matchRgx.Length - 1)));
-										else
-											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_Identifier"));
-											//Si la cuenta es menor que cero, significa que no hay niguna palabra reservada en la cadena
+										else //Si no es reservada es un identificador
+										{
+											if (matchRgx.Length > 31)
+											{
+												SetOutputLines(matchRgx.Substring(0, 31), numLinea, match.Index, (match.Index + 31), ("T_Identifier"));
+												SetOutputLines("", numLinea, 5);
+											}
+											else //Si la cuenta es menor que cero, significa que no hay niguna palabra reservada en la cadena
+												SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_Identifier"));
+										}
 									}
 								}
 								else if (TypeToken == "6")
@@ -196,7 +204,7 @@ namespace minic
 			else if (ErrorType == 4)
 				output = "*** '*/' fuera de comentario en linea " + numlinea + " ***";
 			else if (ErrorType == 5)
-				output = "*** Error de truncado, linea " + numlinea + " *** Identificador truncado hasta: " + cadena;
+				output = "*** Error de truncado, linea " + numlinea + " *** Identificador ***";
 
 			outputLines.Add(output);
 			Console.WriteLine(output);
