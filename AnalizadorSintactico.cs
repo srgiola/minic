@@ -99,5 +99,117 @@ namespace minic
 			else
 				return false;
 		}
+		bool FunctionDecl()
+        {
+
+        }
+		bool _FuntionDecl()
+        {
+
+        }
+		bool Formals()
+        {
+
+        }
+		bool _Formals()
+        {
+
+        }
+		bool Stmt()
+        {
+
+        }
+		bool ForStmt()
+        {
+
+        }
+		bool _ForStmt()
+        {
+
+        }
+		bool PrintStmt()
+        {
+
+        }
+		bool _PrintStmt()
+        {
+
+        }
+		bool Expr()
+        {
+
+        }
+		bool _Expr()
+        {
+
+        }
+		bool ExprP()
+        {
+
+        }
+		bool _ExprP()
+        {
+
+        }
+		bool ExprQ()
+        {
+
+        }
+		bool _ExprQ()
+        {
+
+        }
+		bool ExprR()
+        {
+
+        }
+		bool _ExprR()
+        {
+
+        }
+		bool ExprS()
+        {
+
+        }
+		bool _ExprS()
+        {
+
+        }
+		bool ExprT()
+        {
+
+        }
+		bool _ExprT()
+        {
+
+        }
+		bool ExprU()
+        {
+
+        }
+		bool LValue()
+        {
+			if (Tokens[0].type == "Identificador")
+			{
+				return true;
+			}
+			else if (Tokens[0].content == "(" || Tokens[0].content == "this" || Tokens[0].content == "!" || Tokens[0].content == "New(" || Tokens[0].content == "-")
+			{
+				return Expr();
+			}
+			else return false;
+        }
+		bool Constant()
+        {
+			if (Tokens.Count > 0)
+			{
+				if (Tokens[0].typeConst == "D" || Tokens[0].typeConst == "B" || Tokens[0].typeConst == "S" || Tokens[0].typeConst == "N")
+				{
+					return true;
+				}
+				else return false;
+			}
+			else return false;
+        }
 	}
 }
