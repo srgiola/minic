@@ -30,9 +30,6 @@ namespace minic
 				Tokens = ALexico.getTokens();
 
 				AnalizadorSintactico ASintactivo = new AnalizadorSintactico(Tokens);
-
-				foreach (var item in Tokens)
-					Console.WriteLine(item.type + "	" + item.content + "	" + item.typeConst);
 			}
 			Console.ReadKey();
 		}
