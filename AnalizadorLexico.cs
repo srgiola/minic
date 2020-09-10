@@ -15,7 +15,7 @@ namespace minic
 		string pathDirectory { get; set; }
 		List<string> Reservadas { get; set; }
 		List<string> Operadores { get; set; }
-		List<string> Tokens { get; set; }
+		List<Token> Tokens { get; set; }
 		List<string> outputLines { get; set; }
 		//Jerarquia de la ER
 		//1)String						(""((\w)|(\s)|(\p{P})|(\p{S}))*"")
@@ -34,7 +34,7 @@ namespace minic
 		//7)Error */					([*][/])
 		//8)Caracteres de Error			((\p{P}){1}|(\p{S}){1})
 		Regex ER = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))*"")|(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)([+]|[-])?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
-		
+
 		//Constructor
 		public AnalizadorLexico(string fileName, string pathFile, string pathDirectory)
 		{
@@ -44,12 +44,13 @@ namespace minic
 			Reservadas = new List<string>();
 			Operadores = new List<string>();
 			outputLines = new List<string>();
+			Tokens = new List<Token>();
 
 			string[] _Reserverdas = new string[]{"void", "int", "double", "bool", "string", "class", "const", "interface", "null",
 				"this", "for", "while", "foreach", "if", "else", "return", "break", "New", "NewArray", "Console", "WriteLine",
-				"Print", "ident"};
+				"Print"};
 			string[] _Operadores = new string[] { "+", "-", "*", "/", "%", "<", ">", "<=", ">=", "=", "==", "!=",
-				"&&", "||", "!", ";", ",", ".", "{", "}", "{}", "[", "]", "[]", "(", ")", "()" };
+				"&&", "||", "!", ";", ",", ".", "{", "}", "{}", "[", "]", "[]", "(", ")", "()", "." };
 			Reservadas.AddRange(_Reserverdas);
 			Operadores.AddRange(_Operadores);
 		}
@@ -120,41 +121,77 @@ namespace minic
 								//else if (tmpComillas.Length == 2 && tmpComillas[0] == '"' && tmpComillas[1] == '"') //Si viene un identificador/numero seguido por un par de comillas
 								//	matchRgx = tmpComillas;
 
+								Token Token;
+
 								string TypeToken = getTypeToken(matchRgx); //Type es la Jerarquia de la ER
 								if (TypeToken == "2.1" || TypeToken == "2.3")
+								{
 									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_DoubleConstant (value = " + matchRgx + ")"));
+									if (TypeToken == "2.1")
+										Token = new Token("Constante", matchRgx, numLinea, "E");
+									else
+										Token = new Token("Constante", matchRgx, numLinea, "F");
+									Tokens.Add(Token);
+								}
 								else if (TypeToken == "2.2" || TypeToken == "2.4")
+								{
 									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_IntConstant (value = " + matchRgx + ")"));
+									if (TypeToken == "2.2")
+										Token = new Token("Constante", matchRgx, numLinea, "H");
+									else
+										Token = new Token("Constante", matchRgx, numLinea, "D");
+									Tokens.Add(Token);
+								}
 								else if (TypeToken == "3")
 									SetOutputLines("una cadena", numLinea, 3);
 								else if (TypeToken == "4")
+								{
 									SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("T_StringConstant (value = " + matchRgx + ")"));
+									Token = new Token("Constante", matchRgx, numLinea, "S");
+									Tokens.Add(Token);
+								}
 								else if (TypeToken == "5")
 								{
 									if (matchRgx == "true" || matchRgx == "false")
+									{
 										SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), "T_BoolConstant (value = " + matchRgx + ")");
+										Token = new Token("Constante", matchRgx, numLinea, "B");
+									}
 									else
 									{
 										int tmpCol = 0; //Temporal para llevar el control de las columnas eliminadas en el trunqueo
-										//while (matchRgx.Length > 31) //Controla los errores de truncado reduciendo la cadena hasta tener menor o igual a logitud a 31
-										//{
-										//	string errorTruncado = matchRgx.Substring(0,31);
-										//	tmpCol += 31;
-										//	SetOutputLines(errorTruncado, numLinea, 5);
-										//	matchRgx = matchRgx.Substring(31, matchRgx.Length - 31);
-										//}
+														//while (matchRgx.Length > 31) //Controla los errores de truncado reduciendo la cadena hasta tener menor o igual a logitud a 31
+														//{
+														//	string errorTruncado = matchRgx.Substring(0,31);
+														//	tmpCol += 31;
+														//	SetOutputLines(errorTruncado, numLinea, 5);
+														//	matchRgx = matchRgx.Substring(31, matchRgx.Length - 31);
+														//}
 
 										if (Reservadas.Contains(matchRgx)) //Busca las palabras reservadas
+										{
 											SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_" + matchRgx[0].ToString().ToUpper() + matchRgx.Substring(1, matchRgx.Length - 1)));
+											if (matchRgx == "null")
+												Token = new Token("Contante", matchRgx, numLinea, "N");
+											else
+												Token = new Token("PR", matchRgx, numLinea);
+											Tokens.Add(Token);
+										}
 										else //Si no es reservada es un identificador
 										{
 											if (matchRgx.Length > 31)
 											{
 												SetOutputLines(matchRgx.Substring(0, 31), numLinea, match.Index, (match.Index + 31), ("T_Identifier"));
 												SetOutputLines("", numLinea, 5);
+												Token = new Token("Identificador", matchRgx.Substring(0, 31), numLinea);
+												Tokens.Add(Token);
 											}
-											else //Si la cuenta es menor que cero, significa que no hay niguna palabra reservada en la cadena
+											else
+											{
 												SetOutputLines(matchRgx, numLinea, (match.Index + tmpCol), (match.Index + match.Length), ("T_Identifier"));
+												Token = new Token("Identificador", matchRgx, numLinea);
+												Tokens.Add(Token);
+											}
 										}
 									}
 								}
@@ -164,32 +201,39 @@ namespace minic
 									{
 										SetOutputLines(matchRgx, numLinea, (match.Index - 1), ((match.Index) + match.Length), ("'" + matchRgx + "'"));
 										caracter61 = "";
+										Token = new Token("Operador", matchRgx, numLinea);
+										Tokens.Add(Token);
 									}
 									else
+									{
 										SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), ("'" + matchRgx + "'"));
+										Token = new Token("Operador", matchRgx, numLinea);
+										Tokens.Add(Token);
+									}
 								}
 								else if (matchRgx == "*/") //Este seria el TypeToken = "7"
 									SetOutputLines("", numLinea, 4);
 								else if (TypeToken == "8")
 									SetOutputLines(matchRgx, numLinea, 2);
 
-							nextMatch:
+								nextMatch:
 								match = match.NextMatch();
 							}
 						}
 					}
 				}
 			}
-			using (StreamWriter writer = new StreamWriter(pathDirectory + fileName + ".out"))
-			{
-				foreach (string linea in outputLines)
-					writer.WriteLine(linea);
-			}
+			//Archivo de Salida del Analizador Lexico
+			//using (StreamWriter writer = new StreamWriter(pathDirectory + fileName + ".out"))
+			//{
+			//	foreach (string linea in outputLines)
+			//		writer.WriteLine(linea);
+			//}
 		}
 		private void SetOutputLines(string cadena, int numlinea, int colI, int colF, string T)
 		{
 			string output = cadena + "		" + "linea " + numlinea + " columnas " + (colI + 1) + "-" + (colF + 1) + " es " + T;
-			outputLines.Add(output);
+			//outputLines.Add(output);
 			//Console.WriteLine(output);
 		}
 		private void SetOutputLines(string cadena, int numlinea, int ErrorType)
@@ -207,7 +251,7 @@ namespace minic
 			else if (ErrorType == 5)
 				output = "*** Error de truncado, linea " + numlinea + " *** Identificador ***";
 
-			outputLines.Add(output);
+			//outputLines.Add(output); //Esto añade los errores al archivo txt
 			Console.WriteLine(output);
 		}
 		private string getTypeToken(string matchRgx) //El numero de retorno representa la jerarquia de la ER
@@ -246,5 +290,7 @@ namespace minic
 			else
 				return "8";
 		}
+		public List<Token> getTokens()
+		{ return Tokens; }
 	}
 }
