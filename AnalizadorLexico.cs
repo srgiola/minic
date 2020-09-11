@@ -156,6 +156,7 @@ namespace minic
 									{
 										SetOutputLines(matchRgx, numLinea, match.Index, (match.Index + match.Length), "T_BoolConstant (value = " + matchRgx + ")");
 										Token = new Token("Constante", matchRgx, numLinea, "B");
+										Tokens.Add(Token);
 									}
 									else
 									{

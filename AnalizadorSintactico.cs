@@ -9,19 +9,25 @@ namespace minic
 		// Todas la funciones que comiensen con un _ son primas en la gramatica
 		List<Token> Tokens { get; set; }
 		string error { get; set; }
+		int numError { get; set; }
 		public AnalizadorSintactico(List<Token> _Tokens)
 		{
 			Tokens = _Tokens;
 			Program_();
 			error = "";
+			numError = -1;
 		}
 
 		private void Consumir()
 		{ Tokens.RemoveAt(0); }
 		public void Program_()
 		{
-			Console.WriteLine(Decl());
-			Console.WriteLine(_Program());
+			while (Tokens.Count > 0)
+			{
+				Decl();
+				_Program();
+				Tokens.RemoveAll(x => x.numLinea == numError);
+			}
 		}
 		private string _Program()
 		{
@@ -39,7 +45,11 @@ namespace minic
 				if (FunctionDecl() == "work")
 					return "work";
 				else
-					return "error sintactico";
+				{
+					Console.WriteLine(error);
+
+					return "error"; 
+				}
 			}
 			else
 				return "work";
@@ -56,6 +66,7 @@ namespace minic
 				else
 				{
 					error = "Error en la lienea " + Tokens[0].numLinea + "Se esperaba ';'";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
@@ -97,6 +108,7 @@ namespace minic
 			else
 			{
 				error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba un Tipo de variable o un Identificador";
+				numError = Tokens[0].numLinea;
 				return "error"; 
 			}
 		}
@@ -134,6 +146,7 @@ namespace minic
 							else
 							{
 								error = "Error en linea " + Tokens[0].numLinea + " Se esperaba ')'";
+								numError = Tokens[0].numLinea;
 								return "error";
 							}
 						}
@@ -143,12 +156,14 @@ namespace minic
 					else
 					{
 						error = "Error en linea " + Tokens[0].numLinea + " Se esperaba '('";
+						numError = Tokens[0].numLinea;
 						return "error";
 					}
 				}
 				else
 				{
 					error = "Error en linea " + Tokens[0].numLinea + " Se esperaba un Identificador";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
@@ -174,6 +189,7 @@ namespace minic
 								else
 								{
 									error = "Error en linea " + Tokens[0].numLinea + " Se esperaba ')'";
+									numError = Tokens[0].numLinea;
 									return "error";
 								}
 							}
@@ -183,18 +199,21 @@ namespace minic
 						else
 						{
 							error = "Error en linea " + Tokens[0].numLinea + " Se esperaba '('";
+							numError = Tokens[0].numLinea;
 							return "error";
 						}
 					}
 					else
 					{
 						error = "Error en linea " + Tokens[0].numLinea + " Se esperaba un Identificador";
+						numError = Tokens[0].numLinea;
 						return "error";
 					}
 				}
 				else
 				{ 
 					error = "Error en la linea " + Tokens[0].numLinea + " Se esperada un Identificador o 'void'";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
@@ -227,6 +246,7 @@ namespace minic
 					else
 					{
 						error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba ','";
+						numError = Tokens[0].numLinea;
 						return "error";
 					}
 				}
@@ -267,12 +287,14 @@ namespace minic
 				else
 				{
 					error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba ';'";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
 			else
 			{
 				error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba 'for' | 'Print' | Expresión";
+				numError = Tokens[0].numLinea;
 				return "error";
 			}
 		}
@@ -308,12 +330,14 @@ namespace minic
 											else
 											{
 												error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba 'for' | 'Print' | Expresión";
+												numError = Tokens[0].numLinea;
 												return "error";
 											}
 										}
 										else
 										{
 											error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba ')'";
+											numError = Tokens[0].numLinea;
 											return "error";
 										}
 									}
@@ -323,18 +347,21 @@ namespace minic
 								else
 								{
 									error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba ';'";
+									numError = Tokens[0].numLinea;
 									return "error";
 								}
 							}
 							else
 							{
 								error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba una Expresión";
+								numError = Tokens[0].numLinea;
 								return "error";
 							}
 						}
 						else
 						{
 							error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba ';'";
+							numError = Tokens[0].numLinea;
 							return "error";
 						}
 					}
@@ -344,12 +371,14 @@ namespace minic
 				else
 				{
 					error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba '('";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
 			else
 			{
 				error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba 'for'";
+				numError = Tokens[0].numLinea;
 				return "error";
 			}
 		}
@@ -383,23 +412,27 @@ namespace minic
 									Consumir();
 									if (Tokens[0].content == ";")
 									{
+										Consumir();
 										return "work";
 									}
 									else
 									{
 										error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba ';'";
+										numError = Tokens[0].numLinea;
 										return "error";
 									}
 								}
 								else
 								{
 									error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba ')'";
+									numError = Tokens[0].numLinea;
 									return "error";
 								}
 							}
 							else
 							{
 								error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba ','";
+								numError = Tokens[0].numLinea;
 								return "error";
 							}
 						}
@@ -409,18 +442,21 @@ namespace minic
 					else
 					{
 						error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba una Expresión";
+						numError = Tokens[0].numLinea;
 						return "error";
 					}
 				}
 				else
 				{
 					error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba '('";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
 			else
 			{
 				error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba 'Print'";
+				numError = Tokens[0].numLinea;
 				return "error";
 			}
 		}
@@ -454,6 +490,7 @@ namespace minic
 			else
 			{
 				error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba esperaba una Expresión";
+				numError = Tokens[0].numLinea;
 				return "error";
 			}
 		}
@@ -475,6 +512,7 @@ namespace minic
 				else
 				{
 					error = "Error en la linea " + Tokens[0].numLinea + " Se espraba una Expresión";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
@@ -496,6 +534,7 @@ namespace minic
 			else
 			{
 				error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba esperaba una Expresión";
+				numError = Tokens[0].numLinea;
 				return "error";
 			}
 		}
@@ -517,6 +556,7 @@ namespace minic
 				else
 				{
 					error = "Error en la linea " + Tokens[0].numLinea + " Se espraba una Expresión";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
@@ -538,6 +578,7 @@ namespace minic
 			else
 			{
 				error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba esperaba una Expresión";
+				numError = Tokens[0].numLinea;
 				return "error";
 			}
 		}
@@ -559,6 +600,7 @@ namespace minic
 				else
 				{
 					error = "Error en la linea " + Tokens[0].numLinea + " Se espraba una Expresión";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
@@ -580,6 +622,7 @@ namespace minic
 			else
 			{
 				error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba esperaba una Expresión";
+				numError = Tokens[0].numLinea;
 				return "error";
 			}
 		}
@@ -601,6 +644,7 @@ namespace minic
 				else
 				{
 					error = "Error en la linea " + Tokens[0].numLinea + " Se espraba una Expresión";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
@@ -622,6 +666,7 @@ namespace minic
 			else
 			{
 				error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba esperaba una Expresión";
+				numError = Tokens[0].numLinea;
 				return "error";
 			}
 		}
@@ -643,6 +688,7 @@ namespace minic
 				else
 				{
 					error = "Error en la linea " + Tokens[0].numLinea + " Se espraba una Expresión";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
@@ -664,6 +710,7 @@ namespace minic
 			else
 			{
 				error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba esperaba una Expresión";
+				numError = Tokens[0].numLinea;
 				return "error";
 			}
 		}
@@ -685,6 +732,7 @@ namespace minic
 				else
 				{
 					error = "Error en la linea " + Tokens[0].numLinea + " Se espraba una Expresión";
+					numError = Tokens[0].numLinea;
 					return "error";
 				}
 			}
@@ -704,16 +752,6 @@ namespace minic
 						return "work";
 					}
 				}
-			}
-			if (LValue() == "work")
-			{
-				string r_ExprU = _ExprU();
-				if (r_ExprU == "work" || r_ExprU == "epsilon")
-				{
-					return "work";
-				}
-				else
-					return "error###"; //Si entra hay error
 			}
 			if (Constant() == "work")
 				return "work";
@@ -753,7 +791,18 @@ namespace minic
 					return "work";
 				}
 			}
+			if (LValue() == "work")
+			{
+				string r_ExprU = _ExprU();
+				if (r_ExprU == "work" || r_ExprU == "epsilon")
+				{
+					return "work";
+				}
+				else
+					return "error###"; //Si entra hay error
+			}
 			error = "Error en la linea " + Tokens[0].numLinea + " Expresión incorrecta";
+			numError = Tokens[0].numLinea;
 			return "error";
 		}
 		private string _ExprU()
@@ -773,12 +822,16 @@ namespace minic
 				Consumir();
 				return "work"; 
 			}
-			if (Expr() == "work")
+			if ((Tokens[1].content == "." || Tokens[1].content == "[")) //Se aplica Look ahead
 			{
-				if (_LValue() == "work")
-					return "work";
+				if (Expr() == "work")
+				{
+					if (_LValue() == "work")
+						return "work";
+				}
 			}
 			error = "Error en la linea " + Tokens[0].numLinea + " Se esperaba un identificador o una Expresión correcta";
+			numError = Tokens[0].numLinea;
 			return "error";
 		}
 		private string _LValue()
@@ -805,17 +858,20 @@ namespace minic
 				}
 			}
 			error = "Error en la linea " + Tokens[0].numLinea + " Expresión incorrecta";
+			numError = Tokens[0].numLinea;
 			return "error";
 		}
 		private string Constant()
 		{
 			if (Tokens[0].content == "null" || Tokens[0].type == "Constante")
 			{
+				Consumir();
 				return "work";
 			}
 			else
 			{
 				error = "Error en linea" + Tokens[0].numLinea + " Se esperaba una constante";
+				numError = Tokens[0].numLinea;
 				return "error";
 			}
 		}
