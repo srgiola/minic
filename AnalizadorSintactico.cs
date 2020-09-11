@@ -6,7 +6,7 @@ namespace minic
 {
 	class AnalizadorSintactico
 	{
-		// Todas la funciones que comiensen con un _ son primas en la gramatica
+		//Todas la funciones que comiencen con un _ son primas en la gramática.
 		List<Token> Tokens { get; set; }
 		string error { get; set; }
 		int numError { get; set; }
@@ -17,7 +17,6 @@ namespace minic
 			error = "";
 			numError = -1;
 		}
-
 		private void Consumir()
 		{ Tokens.RemoveAt(0); }
 		public void Program_()
@@ -31,23 +30,23 @@ namespace minic
 		}
 		private string _Program()
 		{
-			if (Decl() == "error")
+			if (Tokens.Count > 0 && Decl() == "error")
 			{
 				return "epsilon";
 			}
-			else
+			else if (Tokens.Count > 0 && Decl() == "work")
 				return _Program();
+			else return "error"; //Si entra acá hay clavo.
 		}
 		private string Decl()
 		{
-			if (VariableDecl() == "error")
+			if (Tokens.Count > 0 && VariableDecl() == "error")
 			{
-				if (FunctionDecl() == "work")
+				if (Tokens.Count > 0 && FunctionDecl() == "work")
 					return "work";
 				else
 				{
 					Console.WriteLine(error);
-
 					return "error"; 
 				}
 			}
@@ -56,7 +55,7 @@ namespace minic
 		}
 		private string VariableDecl()
 		{
-			if (Variable() == "work")
+			if (Tokens.Count > 0 && Variable() == "work")
 			{
 				if (Tokens[0].content == ";")
 				{
@@ -77,9 +76,9 @@ namespace minic
 		}
 		private string Variable()
 		{
-			if (Type() == "work")
+			if (Tokens.Count > 0 && Type() == "work")
 			{
-				if (Tokens[0].type == "Identificador")
+				if (Tokens.Count > 0 && Tokens[0].type == "Identificador")
 				{
 					Consumir();
 					return "work";
@@ -92,7 +91,7 @@ namespace minic
 		}
 		private string Type()
 		{
-			if (Tokens[0].content == "int" || Tokens[0].content == "double" || Tokens[0].content == "bool" || Tokens[0].content == "string")
+			if (Tokens.Count > 0 && (Tokens[0].content == "int" || Tokens[0].content == "double" || Tokens[0].content == "bool" || Tokens[0].content == "string"))
 			{
 				Consumir();
 				string r_Type = _Type();
@@ -101,7 +100,7 @@ namespace minic
 				else
 					return "error";
 			}
-			else if (Tokens[0].type == "Identificador")
+			else if (Tokens.Count > 0 && Tokens[0].type == "Identificador")
 			{
 				return _Type();
 			}
@@ -114,10 +113,10 @@ namespace minic
 		}
 		private string _Type()
 		{
-			if (Tokens[0].content == "[]")
+			if (Tokens.Count > 0 && Tokens[0].content == "[]")
 			{
 				Consumir();
-				if (_Type() == "epsilon")
+				if (Tokens.Count > 0 && _Type() == "epsilon")
 					return "epsilon";
 				else
 					return "error###"; //Si entra aca hay algo malo
@@ -127,18 +126,18 @@ namespace minic
 		}
 		private string FunctionDecl()
 		{
-			if (Type() == "work")
+			if (Tokens.Count > 0 && Type() == "work")
 			{
-				if (Tokens[0].type == "Identificador")
+				if (Tokens.Count > 0 && Tokens[0].type == "Identificador")
 				{
 					Consumir();
-					if (Tokens[0].content == "(")
+					if (Tokens.Count > 0 && Tokens[0].content == "(")
 					{
 						Consumir();
 						string r_Formals = Formals();
 						if (r_Formals == "work" || r_Formals == "epsilon")
 						{
-							if (Tokens[0].content == ")")
+							if (Tokens.Count > 0 && Tokens[0].content == ")")
 							{
 								Consumir();
 								_FunctionDecl(); // Falta programarse
@@ -169,19 +168,19 @@ namespace minic
 			}
 			else
 			{
-				if (Tokens[0].content == "void")
+				if (Tokens.Count > 0 && Tokens[0].content == "void")
 				{
 					Consumir();
-					if (Tokens[0].type == "Identificador")
+					if (Tokens.Count > 0 && Tokens[0].type == "Identificador")
 					{
 						Consumir();
-						if (Tokens[0].content == "(")
+						if (Tokens.Count > 0 && Tokens[0].content == "(")
 						{
 							Consumir();
 							string r_Formals = Formals();
 							if (r_Formals == "work" || r_Formals == "epsilon")
 							{
-								if (Tokens[0].content == ")")
+								if (Tokens.Count > 0 && Tokens[0].content == ")")
 								{
 									Consumir();
 									_FunctionDecl(); //TERMINAR DE PROGRAMAR ESCENARIO AQUI
@@ -221,9 +220,9 @@ namespace minic
 		}
 		private string _FunctionDecl()
 		{
-			if (Stmt() == "work")
+			if (Tokens.Count > 0 && Stmt() == "work")
 			{
-				if (_FunctionDecl() == "epsilon")
+				if (Tokens.Count > 0 && _FunctionDecl() == "epsilon")
 					return "epsilon";
 				else
 					return "error###"; // Si entra aca hay algo malo
@@ -233,12 +232,12 @@ namespace minic
 		}
 		private string Formals()
 		{
-			if (Variable() == "work")
+			if (Tokens.Count > 0 && Variable() == "work")
 			{
 				string r_Formals = _Formals();
 				if (r_Formals == "work" || r_Formals == "epsilon")
 				{
-					if (Tokens[0].content == ",")
+					if (Tokens.Count > 0 && Tokens[0].content == ",")
 					{
 						Consumir();
 						return "work";
@@ -258,7 +257,7 @@ namespace minic
 		}
 		private string _Formals()
 		{
-			if (Variable() == "work")
+			if (Tokens.Count > 0 && Variable() == "work")
 			{
 				string r_Formals = _Formals();
 				if (r_Formals == "work" || r_Formals == "epsilon")
@@ -273,13 +272,13 @@ namespace minic
 		}
 		private string Stmt()
 		{
-			if (ForStmt() == "work")
+			if (Tokens.Count > 0 && ForStmt() == "work")
 				return "work";
-			else if (PrintStmt() == "work")
+			else if (Tokens.Count > 0 && PrintStmt() == "work")
 				return "work";
-			else if (Expr() == "work")
+			else if (Tokens.Count > 0 && Expr() == "work")
 			{
-				if (Tokens[0].content == ";")
+				if (Tokens.Count > 0 && Tokens[0].content == ";")
 				{
 					Consumir();
 					return "work";
@@ -300,30 +299,30 @@ namespace minic
 		}
 		private string ForStmt()
 		{
-			if (Tokens[0].content == "for")
+			if (Tokens.Count > 0 && Tokens[0].content == "for")
 			{
 				Consumir();
-				if (Tokens[0].content == "(")
+				if (Tokens.Count > 0 && Tokens[0].content == "(")
 				{
 					Consumir();
 					string r_ForStmt = _ForStmt();
 					if (r_ForStmt == "work" || r_ForStmt == "epsilon")
 					{
-						if (Tokens[0].content == ";")
+						if (Tokens.Count > 0 && Tokens[0].content == ";")
 						{
 							Consumir();
-							if (Expr() == "work")
+							if (Tokens.Count > 0 && Expr() == "work")
 							{
-								if (Tokens[0].content == ";")
+								if (Tokens.Count > 0 && Tokens[0].content == ";")
 								{
 									Consumir();
 									string r2_ForStmt = _ForStmt();
 									if (r2_ForStmt == "work" || r_ForStmt == "epsilon")
 									{
-										if (Tokens[0].content == ")")
+										if (Tokens.Count > 0 && Tokens[0].content == ")")
 										{
 											Consumir();
-											if (Stmt() == "work")
+											if (Tokens.Count > 0 && Stmt() == "work")
 											{
 												return "work";
 											}
@@ -384,7 +383,7 @@ namespace minic
 		}
 		private string _ForStmt()
 		{
-			if (Expr() == "work")
+			if (Tokens.Count > 0 && Expr() == "work")
 			{
 				return "work";
 			}
@@ -393,24 +392,24 @@ namespace minic
 		}
 		private string PrintStmt()
 		{
-			if (Tokens[0].content == "Print")
+			if (Tokens.Count > 0 && Tokens[0].content == "Print")
 			{
 				Consumir();
-				if (Tokens[0].content == "(")
+				if (Tokens.Count > 0 && Tokens[0].content == "(")
 				{
 					Consumir();
-					if (Expr() == "work")
+					if (Tokens.Count > 0 && Expr() == "work")
 					{
 						string r_PrintStmt = _PrintStmt();
 						if (r_PrintStmt == "work" || r_PrintStmt == "epsilon")
 						{
-							if (Tokens[0].content == ",")
+							if (Tokens.Count > 0 && Tokens[0].content == ",")
 							{
 								Consumir();
-								if (Tokens[0].content == ")")
+								if (Tokens.Count > 0 && Tokens[0].content == ")")
 								{
 									Consumir();
-									if (Tokens[0].content == ";")
+									if (Tokens.Count > 0 && Tokens[0].content == ";")
 									{
 										Consumir();
 										return "work";
@@ -462,7 +461,7 @@ namespace minic
 		}
 		private string _PrintStmt()
 		{
-			if (Expr() == "work")
+			if (Tokens.Count > 0 && Expr() == "work")
 			{
 				string r_PrintStmt= _PrintStmt();
 				if (r_PrintStmt == "work" || r_PrintStmt == "epsilon")
@@ -477,7 +476,7 @@ namespace minic
 		}
 		private string Expr()
 		{
-			if (ExprP() == "work")
+			if (Tokens.Count > 0 && ExprP() == "work")
 			{
 				string r_Expr = _Expr();
 				if (r_Expr == "work" || r_Expr == "epsilon")
@@ -496,7 +495,7 @@ namespace minic
 		}
 		private string _Expr()
 		{
-			if (Tokens[0].content == "||")
+			if (Tokens.Count > 0 && Tokens[0].content == "||")
 			{
 				Consumir();
 				if (ExprP() == "work")
@@ -521,7 +520,7 @@ namespace minic
 		}
 		private string ExprP()
 		{
-			if (ExprQ() == "work")
+			if (Tokens.Count > 0 && ExprQ() == "work")
 			{
 				string r_ExprP = _ExprP();
 				if (r_ExprP == "work" || r_ExprP == "epsilon")
@@ -540,10 +539,10 @@ namespace minic
 		}
 		private string _ExprP()	
 		{
-			if (Tokens[0].content == "&&")
+			if (Tokens.Count > 0 && Tokens[0].content == "&&")
 			{
 				Consumir();
-				if (ExprQ() == "work")
+				if (Tokens.Count > 0 && ExprQ() == "work")
 				{
 					string r_ExprP = _ExprP();
 					if (r_ExprP == "epsilon" || r_ExprP == "work")
@@ -565,7 +564,7 @@ namespace minic
 		}
 		private string ExprQ()
 		{
-			if (ExprR() == "work") //La siguiente
+			if (Tokens.Count > 0 && ExprR() == "work") //La siguiente
 			{
 				string r_ExprQ = _ExprQ(); //La prima de esta
 				if (r_ExprQ == "work" || r_ExprQ == "epsilon")
@@ -584,10 +583,10 @@ namespace minic
 		}
 		private string _ExprQ()
 		{
-			if (Tokens[0].content == "==" || Tokens[0].content == "!=")
+			if (Tokens.Count > 0 && (Tokens[0].content == "==" || Tokens[0].content == "!="))
 			{
 				Consumir();
-				if (ExprR() == "work") //Esta es la siguiente
+				if (Tokens.Count > 0 && ExprR() == "work") //Esta es la siguiente
 				{
 					string r_ExprQ = _ExprQ(); //Es la misma
 					if (r_ExprQ == "epsilon" || r_ExprQ == "work")
@@ -609,7 +608,7 @@ namespace minic
 		}
 		private string ExprR()
 		{
-			if (ExprS() == "work") //La siguiente
+			if (Tokens.Count > 0 && ExprS() == "work") //La siguiente
 			{
 				string r_ExprR = _ExprR(); //La prima de esta
 				if (r_ExprR == "work" || r_ExprR == "epsilon")
@@ -628,10 +627,10 @@ namespace minic
 		}
 		private string _ExprR()
 		{
-			if (Tokens[0].content == "<" || Tokens[0].content == ">" || Tokens[0].content == "<=" || Tokens[0].content == ">=")
+			if (Tokens.Count > 0 && (Tokens[0].content == "<" || Tokens[0].content == ">" || Tokens[0].content == "<=" || Tokens[0].content == ">="))
 			{
 				Consumir();
-				if (ExprS() == "work") //Esta es la siguiente
+				if (Tokens.Count > 0 && ExprS() == "work") //Esta es la siguiente
 				{
 					string r_ExprR = _ExprR(); //Es la misma
 					if (r_ExprR == "epsilon" || r_ExprR == "work")
@@ -653,7 +652,7 @@ namespace minic
 		}
 		private string ExprS()
 		{
-			if (ExprT() == "work") //La siguiente
+			if (Tokens.Count > 0 && ExprT() == "work") //La siguiente
 			{
 				string r_ExprS = _ExprS(); //La prima de esta
 				if (r_ExprS == "work" || r_ExprS == "epsilon")
@@ -672,10 +671,10 @@ namespace minic
 		}
 		private string _ExprS()
 		{
-			if (Tokens[0].content == "+" || Tokens[0].content == "-")
+			if (Tokens.Count > 0 && (Tokens[0].content == "+" || Tokens[0].content == "-"))
 			{
 				Consumir();
-				if (ExprT() == "work") //Esta es la siguiente
+				if (Tokens.Count > 0 && ExprT() == "work") //Esta es la siguiente
 				{
 					string r_ExprS = _ExprS(); //Es la misma
 					if (r_ExprS == "epsilon" || r_ExprS == "work")
@@ -697,7 +696,7 @@ namespace minic
 		}
 		private string ExprT()
 		{
-			if (ExprU() == "work") //La siguiente
+			if (Tokens.Count > 0 && ExprU() == "work") //La siguiente
 			{
 				string r_ExprT = _ExprT(); //La prima de esta
 				if (r_ExprT == "work" || r_ExprT == "epsilon")
@@ -716,10 +715,10 @@ namespace minic
 		}
 		private string _ExprT()
 		{
-			if (Tokens[0].content == "*" || Tokens[0].content == "/" || Tokens[0].content == "%")
+			if (Tokens.Count > 0 && (Tokens[0].content == "*" || Tokens[0].content == "/" || Tokens[0].content == "%"))
 			{
 				Consumir();
-				if (ExprU() == "work") //Esta es la siguiente
+				if (Tokens.Count > 0 && ExprU() == "work") //Esta es la siguiente
 				{
 					string r_ExprT= _ExprT(); //Es la misma
 					if (r_ExprT == "epsilon" || r_ExprT == "work")
@@ -741,41 +740,41 @@ namespace minic
 		}
 		private string ExprU()
 		{
-			if (Tokens[0].content == "(")
+			if (Tokens.Count > 0 && Tokens[0].content == "(")
 			{
 				Consumir();
-				if (Expr() == "work")
+				if (Tokens.Count > 0 && Expr() == "work")
 				{
-					if (Tokens[0].content == ")")
+					if (Tokens.Count > 0 && Tokens[0].content == ")")
 					{
 						Consumir();
 						return "work";
 					}
 				}
 			}
-			if (Constant() == "work")
+			if (Tokens.Count > 0 && Constant() == "work")
 				return "work";
-			if (Tokens[0].content == "this")
+			if (Tokens.Count > 0 && Tokens[0].content == "this")
 			{
 				Consumir();
 				return "work"; 
 			}
-			if (Tokens[0].content == "!")
+			if (Tokens.Count > 0 && Tokens[0].content == "!")
 			{
 				Consumir();
-				if (Expr() == "work")
+				if (Tokens.Count > 0 && Expr() == "work")
 					return "work";
 			}
-			if (Tokens[0].content == "New")
+			if (Tokens.Count > 0 && Tokens[0].content == "New")
 			{
 				Consumir();
-				if (Tokens[0].content == "(")
+				if (Tokens.Count > 0 && Tokens[0].content == "(")
 				{
 					Consumir();
-					if (Tokens[0].type == "Identificador")
+					if (Tokens.Count > 0 && Tokens[0].type == "Identificador")
 					{
 						Consumir();
-						if (Tokens[0].content == ")")
+						if (Tokens.Count > 0 && Tokens[0].content == ")")
 						{
 							Consumir();
 							return "work";
@@ -783,10 +782,10 @@ namespace minic
 					}
 				}
 			}
-			if (Tokens[0].content == "-")
+			if (Tokens.Count > 0 && Tokens[0].content == "-")
 			{
 				Consumir();
-				if (Expr() == "work")
+				if (Tokens.Count > 0 && Expr() == "work")
 				{
 					return "work";
 				}
@@ -807,24 +806,24 @@ namespace minic
 		}
 		private string _ExprU()
 		{
-			if (Tokens[0].content == "-")
+			if (Tokens.Count > 0 && Tokens[0].content == "-")
 			{
 				Consumir();
-				if (Expr() == "work")
+				if (Tokens.Count > 0 && Expr() == "work")
 					return "work";
 			}
 			return "epsilon";
 		}
 		private string LValue()
 		{
-			if (Tokens[0].type == "Identificador")
+			if (Tokens.Count > 0 && Tokens[0].type == "Identificador")
 			{
 				Consumir();
 				return "work"; 
 			}
-			if ((Tokens[1].content == "." || Tokens[1].content == "[")) //Se aplica Look ahead
+			if (Tokens.Count > 0 && (Tokens[1].content == "." || Tokens[1].content == "[")) //Se aplica Lookahead
 			{
-				if (Expr() == "work")
+				if (Tokens.Count > 0 && Expr() == "work")
 				{
 					if (_LValue() == "work")
 						return "work";
@@ -836,21 +835,21 @@ namespace minic
 		}
 		private string _LValue()
 		{
-			if (Tokens[0].content == ".")
+			if (Tokens.Count > 0 && Tokens[0].content == ".")
 			{
 				Consumir();
-				if (Tokens[0].type == "Identificador")
+				if (Tokens.Count > 0 && Tokens[0].type == "Identificador")
 				{
 					Consumir();
 					return "work";
 				}
 			}
-			if (Tokens[0].content == "[")
+			if (Tokens.Count > 0 && Tokens[0].content == "[")
 			{
 				Consumir();
-				if (Expr() == "work")
+				if (Tokens.Count > 0 && Expr() == "work")
 				{
-					if (Tokens[0].content == "]")
+					if (Tokens.Count > 0 && Tokens[0].content == "]")
 					{
 						Consumir();
 						return "work";
@@ -863,7 +862,7 @@ namespace minic
 		}
 		private string Constant()
 		{
-			if (Tokens[0].content == "null" || Tokens[0].type == "Constante")
+			if (Tokens.Count > 0 && (Tokens[0].content == "null" || Tokens[0].type == "Constante"))
 			{
 				Consumir();
 				return "work";
