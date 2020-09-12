@@ -1,0 +1,4 @@
+bool [] unVector;
+string unaFuncion ( double unParametro int parametro2, ) 
+Print ( this,);
+voi_d unMetodo (  ) Print ( true > 22, ); // Error se espera identificador o void

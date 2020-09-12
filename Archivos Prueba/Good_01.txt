@@ -1,0 +1,7 @@
+void unMetodo (int [][][] SdeSergi0,)
+for (; New(prro); this) Print (!5.5+8*true,);
+
+int identx;
+double[] identx ;
+
+void unMetod()

@@ -1,0 +1,4 @@
+
+int metodo () 
+	Print ("hola",);
+int meodo2 (double formas) Print(-(5*2),); //Error falta coma despues de formas

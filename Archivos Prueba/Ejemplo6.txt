@@ -1,4 +1,0 @@
-string tmp = "";
-string tmp [ "";
-string tmp * "";
-string tmp ; "";

@@ -1,0 +1,3 @@
+void MetodoPrron ( identif[][] identDeIdentif int supuestoParametro bool gramo, )
+true -(true % New(idk));
+for (;i <= 123;) i+1; 
