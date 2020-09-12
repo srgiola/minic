@@ -51,4 +51,23 @@ Si el resultado es un Identificador/Reservada se analiza si la cadena es una pal
 Si no es ninguno de estos dos se manda a generar el token o error con el caracter que se esta analizando en ese momento.
 </p>
 
-
+<h3 align = "left">Analizador Sintactico Descendente Recursivo</h3>
+<p align="left">
+Para esta fase se ha utilizado la siguiente gramatica: </br>
+https://docs.google.com/document/d/10RhYVMYsLzrrJKRTNNxrR2Z8TuBcNV2Q24yhxDdTG9I/edit?usp=sharing
+</br></br>
+La presente fase del compilador se trabaja sobre la una clase que recibe como parametro una lista de Tokens en orden conforme fueron encontrados y analizados por el Analizador lexico. Este objeto Token esta conformado por su Type, que indica si es operador, palabra reservada, constante o identificador. content que es el contenido del token, numLinea que representa el numero de linea donde se encontraba este token; y typeConst que indica que tipo de constante es este token, cuando no es una constante este campo se encuentra como una cadena vacia
+</br></br>
+El analizador Sintactivo funciona ingresando a cada producción segun sea el orden en la gramatica y cuando en la gramatica encuentra un simbolo terminal este compara que el token en la posición [0] de la lista de Tokens sea el mismo ST y si este es procede a consumir el token y eliminarlo de la lista Tokens, y luego procede a almacenar este en una lista temporal de token (tmpTokens).
+</br></br>
+Se ha creado una función por cada producción de tipo string. Cada funcion es capaz de devolver cinco tipos de retroalimentación a si mismo para poder ejecutar el analisis correctamente, las posibles respuestas son:
+* "work", significa que la actual producción ha resultado correcta
+* "error", significa que se ha encontrado un error de lexico
+* "error###", indica que se ha ingresado a un posible error no controlado
+* "cero", significa que la lista Tokens se encuentra vacia.
+* "epsilon", significa que la cadena es aceptable que no se encuentre
+</br></br>
+Cuando se encuentra que una producción ha retornado error, el analizador lexico ingresa a la siguiente producción correspondiente del mismo nivel y si algun token ha sido consumido durante el analisis anterior, se procede a integrar los tokens eliminados almacenados en tmpTokens de nuevo a la lista Tokens realizando asi un Backtraking hacia la ultima cadena de tokens correcta. Luego tmpTokens se vuelve a su estado inicial para se utilizada una proxima vez si es necesario.
+</br></br>
+Si el Analizador Sintactico sigue revisando producciones cuando ya no se encuentran tokens, este solo verifica que el resultado sea "epsilon" o si regresa a la producción Decl o Program este verifica que si aun existen tokens por lo que si ya no hay se para el analisis. 
+</p>
