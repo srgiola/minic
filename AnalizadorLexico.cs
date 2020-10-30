@@ -50,7 +50,7 @@ namespace minic
 				"this", "for", "while", "foreach", "if", "else", "return", "break", "New", "NewArray", "Console", "WriteLine",
 				"Print"};
 			string[] _Operadores = new string[] { "+", "-", "*", "/", "%", "<", ">", "<=", ">=", "=", "==", "!=",
-				"&&", "||", "!", ";", ",", ".", "{", "}", "{}", "[", "]", "[]", "(", ")", "()", "." };
+				"&&", "||", "!", ";", ",", ".", "{", "}", "{}", "[", "]", "[]", "(", ")", "()", ".", ":" };
 			Reservadas.AddRange(_Reserverdas);
 			Operadores.AddRange(_Operadores);
 		}
