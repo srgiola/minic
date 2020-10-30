@@ -8,23 +8,19 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\srgio\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\asgas\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\srgio\\Documents\\Programas Visual Studio\\minic\\minic.csproj",
+      "projectUniqueName": "C:\\Users\\asgas\\Desktop\\minic\\minic.csproj",
       "projectName": "minic",
-      "projectPath": "C:\\Users\\srgio\\Documents\\Programas Visual Studio\\minic\\minic.csproj",
-      "packagesPath": "C:\\Users\\srgio\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\srgio\\Documents\\Programas Visual Studio\\minic\\obj\\",
+      "projectPath": "C:\\Users\\asgas\\Desktop\\minic\\minic.csproj",
+      "packagesPath": "C:\\Users\\asgas\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\asgas\\Desktop\\minic\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\srgio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\asgas\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -62,7 +58,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
       }
     }
   }
