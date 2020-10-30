@@ -26,6 +26,7 @@ namespace minic
             Token t_dollar = new Token("PR", "$/#", 0);
             this.Tokens.Add(t_dollar);
 
+            /* EJEMPLOS 
             string[] Simbolos0 = new string[] {"E"};
             Producción P0 = new Producción(0, 1, "E'", Simbolos0);
             Producciones.Add(P0);
@@ -37,22 +38,6 @@ namespace minic
             string[] Simbolos2 = new string[] { "T" };
             Producción P2 = new Producción(2, 1, "E", Simbolos2);
             Producciones.Add(P2);
-
-            string[] Simbolos3 = new string[] { "T", "*", "F" };
-            Producción P3 = new Producción(3, 3, "T", Simbolos3);
-            Producciones.Add(P3);
-
-            string[] Simbolos4 = new string[] { "F" };
-            Producción P4 = new Producción(4, 1, "T", Simbolos4);
-            Producciones.Add(P4);
-
-            string[] Simbolos5 = new string[] { "(", "E", ")" };
-            Producción P5 = new Producción(5, 3, "F", Simbolos5);
-            Producciones.Add(P5);
-
-            string[] Simbolos6 = new string[] { "id" };
-            Producción P6 = new Producción(6, 1, "F", Simbolos6);
-            Producciones.Add(P6);
 
             Dictionary<string, string> Estado0 = new Dictionary<string, string>();
             Estado0.Add("(", "d4");
@@ -74,66 +59,10 @@ namespace minic
             Estado2.Add("$/#", "r2");
             Estados.Add(2, Estado2);
 
-            Dictionary<string, string> Estado3 = new Dictionary<string, string>();
-            Estado3.Add("+", "r4");
-            Estado3.Add("*", "r4");
-            Estado3.Add(")", "r4");
-            Estado3.Add("$/#", "r4");
-            Estados.Add(3, Estado3);
+           */
 
-            Dictionary<string, string> Estado4 = new Dictionary<string, string>();
-            Estado4.Add("(", "d4");
-            Estado4.Add("id", "d5");
-            Estado4.Add("E", "8");
-            Estado4.Add("T", "2");
-            Estado4.Add("F", "3");
-            Estados.Add(4, Estado4);
 
-            Dictionary<string, string> Estado5 = new Dictionary<string, string>();
-            Estado5.Add("+", "r6");
-            Estado5.Add("*", "r6");
-            Estado5.Add(")", "r6");
-            Estado5.Add("$/#", "r6");
-            Estados.Add(5, Estado5);
 
-            Dictionary<string, string> Estado6 = new Dictionary<string, string>();
-            Estado6.Add("(", "d4");
-            Estado6.Add("id", "d5");
-            Estado6.Add("T", "9");
-            Estado6.Add("F", "3");
-            Estados.Add(6, Estado6);
-
-            Dictionary<string, string> Estado7 = new Dictionary<string, string>();
-            Estado7.Add("(", "d4");
-            Estado7.Add("id", "d5");
-            Estado7.Add("F", "10");
-            Estados.Add(7, Estado7);
-
-            Dictionary<string, string> Estado8 = new Dictionary<string, string>();
-            Estado8.Add("+", "d6");
-            Estado8.Add(")", "d11");
-            Estados.Add(8, Estado8);
-
-            Dictionary<string, string> Estado9 = new Dictionary<string, string>();
-            Estado9.Add("+", "r1");
-            Estado9.Add("*", "d7");
-            Estado9.Add(")", "r1");
-            Estado9.Add("$/#", "r1");
-            Estados.Add(9, Estado9);
-
-            Dictionary<string, string> Estado10 = new Dictionary<string, string>();
-            Estado10.Add("+", "r3");
-            Estado10.Add("*", "r3");
-            Estado10.Add(")", "r3");
-            Estado10.Add("$/#", "r3");
-            Estados.Add(10, Estado10);
-
-            Dictionary<string, string> Estado11 = new Dictionary<string, string>();
-            Estado11.Add("+", "r5");
-            Estado11.Add("*", "r5");
-            Estado11.Add(")", "r5");
-            Estado11.Add("$/#", "r5");
-            Estados.Add(11, Estado11);
 
             PilaEstados.Push("0");
         }
@@ -252,7 +181,7 @@ namespace minic
         }
         private bool IsD(string D)
         {
-            if (D[0] == 'd')
+            if (D[0] == 's')
                 return true;
             else
                 return false;

@@ -17,9 +17,5 @@ namespace minic
         public int cantSimbolos { get; set; }
         public string productor { get; set; }
         public List<string> Simbolos { get; set; }
-        //public Stack<string> validar(Stack<string> SimbolosStack)
-        //{
-        //    return;
-        //}
     }
 }
