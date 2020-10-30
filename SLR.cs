@@ -12,7 +12,7 @@ namespace minic
         List<Token> Tokens = new List<Token>();
         List<Producción> Producciones= new List<Producción>();
         Stack<string> PilaEstados = new Stack<string>();
-        Stack<string> PilaTokens = new Stack<string>();
+        Stack<Token> PilaTokens = new Stack<Token>();
         Dictionary<int, Dictionary<string, string>> Estados = new Dictionary<int, Dictionary<string, string>>();
         //TKey = Numero estado
         //TValue = Dicionario con  TKey = Simbolo/Goto, TValue = acción
@@ -484,16 +484,16 @@ namespace minic
                 bool AuxBool = Estados.TryGetValue(estado_Actual, out AuxDicc);
                 if (AuxBool)
                 {
-                    string token_actual = Tokens[0].content;
+                    Token token_actual = Tokens[0];
                     string action = "";
 
-                    AuxBool = AuxDicc.TryGetValue(token_actual, out action);
+                    AuxBool = AuxDicc.TryGetValue(StrToken(token_actual), out action);
 
                     if (proviene_de_R) //IR_A  -- Ya que siempre que se ejecuta un r# se realiza un Ir_A luego
                     {
-                        string token_Cima = PilaTokens.First();
+                        Token token_Cima = PilaTokens.First();
                         string tmp_Estado_Actual;
-                        bool tmpR = AuxDicc.TryGetValue(token_Cima, out tmp_Estado_Actual);
+                        bool tmpR = AuxDicc.TryGetValue(StrToken(token_Cima), out tmp_Estado_Actual);
 
                         if (tmpR)
                         { 
@@ -518,19 +518,21 @@ namespace minic
                             case "R": //Reduccion
                                 int ID_Producion = int.Parse(matchRgx);
                                 Producción P = Producciones.Find(x => (x.ID == ID_Producion));
+                                int ultimalinea = 0;
+
                                 for (int i = 0; i < P.cantSimbolos; i++)
                                 {
                                     PilaEstados.Pop();
+                                    ultimalinea = PilaTokens.First().numLinea;
                                     PilaTokens.Pop();
                                 }
-                                PilaTokens.Push(P.productor);
+                                PilaTokens.Push(CrearTokenEstado(P.productor, ultimalinea));
                                 estado_Actual = int.Parse(PilaEstados.First());
-                                //estado_Actual = int.Parse(matchRgx);
                                 proviene_de_R = true;
                                 break;
 
                             case "D": //Desplazamiento
-                                string token_cargar = Tokens[0].content;
+                                Token token_cargar = Tokens[0];
                                 string estado_cargar = matchRgx;
                                 PilaEstados.Push(estado_cargar);
                                 PilaTokens.Push(token_cargar);
@@ -590,10 +592,46 @@ namespace minic
                 return true;
             else
                 return false;
+            //return (D[0] == 's') ? true : false;
         }
         private void Consumir()
         {
             Tokens.RemoveAt(0);
+        }
+
+        private Token CrearTokenEstado(string productor, int numLinea)
+        {
+            Token token = new Token("Estado", productor, numLinea);
+            return token;
+        }
+        private string StrToken(Token token)
+        {
+            if (token.type == "Constante")
+            {
+                switch (token.typeConst)
+                {
+                    case "H": // Hexadecimal
+                        return "intConstant";
+                    case "E": //Exponencial
+                        return "doubleConstant";
+                    case "I": //Entero
+                        return "intConstant";
+                    case "D": //Decimal
+                        return "doubleConstant";
+                    case "S": //Cadena
+                        return "stringConstant";
+                    case "B": //Bool
+                        return "boolConstant";
+                    case "F": //Flotantes
+                        return "doubleConstant";
+                    default:
+                        return "null";
+                }
+            }
+            else if (token.type == "Identificador")
+                return "ident";
+            else
+                return token.content;
         }
     }
 }
