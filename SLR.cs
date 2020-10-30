@@ -18,11 +18,10 @@ namespace minic
         //TValue = Dicionario con  TKey = Simbolo/Goto, TValue = acción
 
         //DEBIDO A QUE EL SIMBOLO '$' PUEDE VENIR INGRESADO COMO UN TOKEN STRING SE HA CAMBIADO EL SIMBOLO FINAL A ESTA COMBINACIÓN '$/#'
-        //ASI MISMO 'ACC' O 'ACEPTAR' A SERA UTILIZADO LA COMBINACIÓN '/ACC'
+        //ASÍ MISMO 'ACC' O 'ACEPTAR' A SERA UTILIZADO LA COMBINACIÓN '/ACC'
 
         public SLR(List<Token> Tokens)
         {
-            //No tocar.
             this.Tokens = Tokens;
             Token t_dollar = new Token("PR", "$/#", 0);
             this.Tokens.Add(t_dollar);
@@ -223,213 +222,193 @@ namespace minic
             Producción P48 = new Producción(48, 6, "Stmt", Simbolos48);
             Producciones.Add(P48);
 
-            string[] Simbolos49 = new string[] { "" };
-            Producción P49 = new Producción(49, , "Stmt", Simbolos49);
+            string[] Simbolos49 = new string[] { "while", "(", "Expr", ")", "Stmt" };
+            Producción P49 = new Producción(49, 5, "Stmt", Simbolos49);
             Producciones.Add(P49);
 
-            string[] Simbolos50 = new string[] { "" };
-            Producción P50 = new Producción(50, , "Stmt", Simbolos50);
+            string[] Simbolos50 = new string[] { "for", "(", "Expr", ";", "Expr", ";", "Expr", ")", "Stmt"};
+            Producción P50 = new Producción(50, 9, "Stmt", Simbolos50);
             Producciones.Add(P50);
 
-            string[] Simbolos51 = new string[] { "" };
-            Producción P51 = new Producción(51, , "Stmt", Simbolos51);
+            string[] Simbolos51 = new string[] { "break", ";" };
+            Producción P51 = new Producción(51, 2, "Stmt", Simbolos51);
             Producciones.Add(P51);
 
-            string[] Simbolos52 = new string[] { "" };
-            Producción P52 = new Producción(52, , "Stmt", Simbolos52);
+            string[] Simbolos52 = new string[] { "return", "Expr", ";" };
+            Producción P52 = new Producción(52, 3, "Stmt", Simbolos52);
             Producciones.Add(P52);
 
-            string[] Simbolos53 = new string[] { "" };
-            Producción P53 = new Producción(53, , "Stmt", Simbolos53);
+            string[] Simbolos53 = new string[] { "Console", ".", "WriteLine", "(", "Ex", ",", ")", ";" };
+            Producción P53 = new Producción(53, 8, "Stmt", Simbolos53);
             Producciones.Add(P53);
 
             string[] Simbolos54 = new string[] { "StmtBlock" };
             Producción P54 = new Producción(54, 1, "Stmt", Simbolos54);
             Producciones.Add(P54);
 
-            string[] Simbolos55 = new string[] { "" };
-            Producción P55 = new Producción(55, , "", Simbolos55);
+            string[] Simbolos55 = new string[] { "else", "Stmt" };
+            Producción P55 = new Producción(55, 2, "Else", Simbolos55);
             Producciones.Add(P55);
 
             string[] Simbolos56 = new string[] { "" };
-            Producción P56 = new Producción(56, , "", Simbolos56);
+            Producción P56 = new Producción(56, 0, "Else", Simbolos56);
             Producciones.Add(P56);
 
-            string[] Simbolos57 = new string[] { "" };
-            Producción P57 = new Producción(57, , "", Simbolos57);
+            string[] Simbolos57 = new string[] { "Expr", "Ex'" };
+            Producción P57 = new Producción(57, 2, "Ex", Simbolos57);
             Producciones.Add(P57);
 
-            string[] Simbolos58 = new string[] { "" };
-            Producción P58 = new Producción(58, , "", Simbolos58);
+            string[] Simbolos58 = new string[] { "Expr", "Ex'" };
+            Producción P58 = new Producción(58, 2, "Ex'", Simbolos58);
             Producciones.Add(P58);
 
             string[] Simbolos59 = new string[] { "" };
-            Producción P59 = new Producción(59, , "", Simbolos59);
+            Producción P59 = new Producción(59, 0, "Ex'", Simbolos59);
             Producciones.Add(P59);
 
             string[] Simbolos60 = new string[] { "ExprA", "Expr'" };
             Producción P60 = new Producción(60, 2, "Expr", Simbolos60);
             Producciones.Add(P60);
 
-            string[] Simbolos61 = new string[] { "" };
-            Producción P61 = new Producción(61, , "", Simbolos61);
+            string[] Simbolos61 = new string[] { "&&", "ExprA", "Expr'" };
+            Producción P61 = new Producción(61, 3, "Expr'", Simbolos61);
             Producciones.Add(P61);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos62 = new string[] { "" };
+            Producción P62 = new Producción(62, 0, "Expr'", Simbolos62);
+            Producciones.Add(P62);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos63 = new string[] { "ExprB", "ExprA'" };
+            Producción P63 = new Producción(63, 2, "ExprA", Simbolos63);
+            Producciones.Add(P63);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos64 = new string[] { "==", "ExprB", "ExprA'" };
+            Producción P64 = new Producción(64, 3, "ExprA'", Simbolos64);
+            Producciones.Add(P64);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos65 = new string[] { "" };
+            Producción P65 = new Producción(65, 0, "ExprA'", Simbolos65);
+            Producciones.Add(P65);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos66 = new string[] { "ExprC", "ExprB'" };
+            Producción P66 = new Producción(66, 2, "ExprB", Simbolos66);
+            Producciones.Add(P66);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos67 = new string[] { "<", "ExprC", "ExprB'" };
+            Producción P67 = new Producción(67, 3, "ExprB'", Simbolos67);
+            Producciones.Add(P67);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos68 = new string[] { "" };
+            Producción P68 = new Producción(68, 0, "ExprB'", Simbolos68);
+            Producciones.Add(P68);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos69 = new string[] { "ExprD", "ExprC'" };
+            Producción P69 = new Producción(69, 2, "ExprC", Simbolos69);
+            Producciones.Add(P69);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos70 = new string[] { "<=", "ExprD", "ExprC'" };
+            Producción P70 = new Producción(70, 3, "ExprC'", Simbolos70);
+            Producciones.Add(P70);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos71 = new string[] { "" };
+            Producción P71 = new Producción(71, 0, "ExprC'", Simbolos71);
+            Producciones.Add(P71);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos72 = new string[] { "ExprE", "ExprD'" };
+            Producción P72 = new Producción(72, 2, "ExprD", Simbolos72);
+            Producciones.Add(P72);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos73 = new string[] { "+", "ExprE", "ExprD'" };
+            Producción P73 = new Producción(73, 3, "ExprD'", Simbolos73);
+            Producciones.Add(P73);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos74 = new string[] { "" };
+            Producción P74 = new Producción(74, 0, "ExprD'", Simbolos74);
+            Producciones.Add(P74);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos75 = new string[] { "ExprF", "ExprE'" };
+            Producción P75 = new Producción(75, 2, "ExprE", Simbolos75);
+            Producciones.Add(P75);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos76 = new string[] { "*", "ExprF", "ExprE'" };
+            Producción P76 = new Producción(76, 3, "ExprE'", Simbolos76);
+            Producciones.Add(P76);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos77 = new string[] { "" };
+            Producción P77 = new Producción(77, 0, "ExprE'", Simbolos77);
+            Producciones.Add(P77);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos78 = new string[] { "ExprG", "ExprF'" };
+            Producción P78 = new Producción(78, 2, "ExprF", Simbolos78);
+            Producciones.Add(P78);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos79 = new string[] { "%", "ExprG", "ExprF'" };
+            Producción P79 = new Producción(79, 3, "ExprF'", Simbolos79);
+            Producciones.Add(P79);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos80 = new string[] { "" };
+            Producción P80 = new Producción(80, 0, "ExprF'", Simbolos80);
+            Producciones.Add(P80);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos81 = new string[] { "!", "Expr" };
+            Producción P81 = new Producción(81, 2, "ExprG", Simbolos81);
+            Producciones.Add(P81);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos82 = new string[] { "New", "(", "ident", ")" };
+            Producción P82 = new Producción(82, 4, "ExprG", Simbolos82);
+            Producciones.Add(P82);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos83 = new string[] { "LValue", "=", "Expr" };
+            Producción P83 = new Producción(83, 3, "ExprG", Simbolos83);
+            Producciones.Add(P83);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos84 = new string[] { "Constant" };
+            Producción P84 = new Producción(84, 1, "ExprG", Simbolos84);
+            Producciones.Add(P84);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos85 = new string[] { "LValue" };
+            Producción P85 = new Producción(85, 1, "ExprG", Simbolos85);
+            Producciones.Add(P85);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos86 = new string[] { "this" };
+            Producción P86 = new Producción(86, 1, "ExprG", Simbolos86);
+            Producciones.Add(P86);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos87 = new string[] { "(", "Expr", ")" };
+            Producción P87 = new Producción(87, 3, "ExprG", Simbolos87);
+            Producciones.Add(P87);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos88 = new string[] { "-", "Expr" };
+            Producción P88 = new Producción(88, 2, "ExprG", Simbolos88);
+            Producciones.Add(P88);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos89 = new string[] { "ident" };
+            Producción P89 = new Producción(89, 1, "LValue", Simbolos89);
+            Producciones.Add(P89);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos90 = new string[] { "Expr", ".", "ident" };
+            Producción P90 = new Producción(90, 3, "LValue", Simbolos90);
+            Producciones.Add(P90);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos91 = new string[] { "intConstant" };
+            Producción P91 = new Producción(91, 1, "Constant", Simbolos91);
+            Producciones.Add(P91);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos92 = new string[] { "doubleConstant" };
+            Producción P92 = new Producción(92, 1, "Constant", Simbolos92);
+            Producciones.Add(P92);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos93 = new string[] { "boolConstant" };
+            Producción P93 = new Producción(93, 1, "Constant", Simbolos93);
+            Producciones.Add(P93);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos94 = new string[] { "stringConstant" };
+            Producción P94 = new Producción(94, 1, "Constant", Simbolos94);
+            Producciones.Add(P94);
 
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
-
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
-
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
-
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
-
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
-
-            string[] Simbolos = new string[] { "" };
-            Producción P = new Producción(, , "", Simbolos44);
-            Producciones.Add(P);
+            string[] Simbolos95 = new string[] { "null" };
+            Producción P95 = new Producción(95, 1, "Constant", Simbolos95);
+            Producciones.Add(P95);
 
             /* EJEMPLOS 
             string[] Simbolos0 = new string[] {"E"};
@@ -463,11 +442,163 @@ namespace minic
             Estado2.Add(")", "r2");
             Estado2.Add("$/#", "r2");
             Estados.Add(2, Estado2);
-
            */
 
+            Dictionary<string, string> Estado0 = new Dictionary<string, string>();
+            Estado0.Add("ident", "s12");
+            Estado0.Add("const", "s5");
+            Estado0.Add("class", "s6");
+            Estado0.Add("interface", "s7");
+            Estado0.Add("int", "s8");
+            Estado0.Add("double", "s9");
+            Estado0.Add("bool", "s10");
+            Estado0.Add("string", "s11");
+            Estado0.Add("void", "s13");
+            Estado0.Add("Program", "1");
+            Estado0.Add("Decl", "2");
+            Estado0.Add("Type", "3");
+            Estado0.Add("FunctionDecl", "4");
+            Estados.Add(0, Estado0);
 
+            Dictionary<string, string> Estado1 = new Dictionary<string, string>();
+            Estado1.Add("$/#", "/ACC");
+            Estados.Add(1, Estado1);
 
+            Dictionary<string, string> Estado2 = new Dictionary<string, string>();
+            Estado2.Add("ident", "s12");
+            Estado2.Add("const", "s5");
+            Estado2.Add("class", "s6");
+            Estado2.Add("interface", "s7");
+            Estado2.Add("int", "s8");
+            Estado2.Add("double", "s9");
+            Estado2.Add("bool", "s10");
+            Estado2.Add("string", "s11");
+            Estado2.Add("void", "s13");
+            Estado2.Add("$/#", "r3");
+            Estado2.Add("Decl'", "14");
+            Estado2.Add("Decl", "15");
+            Estado2.Add("Type", "3");
+            Estado2.Add("FunctionDecl", "4");
+            Estados.Add(2, Estado2);
+
+            Dictionary<string, string> Estado3 = new Dictionary<string, string>();
+            Estado3.Add("ident", "s16");
+            Estado3.Add("[", "s17");
+            Estados.Add(3, Estado3);
+
+            Dictionary<string, string> Estado4 = new Dictionary<string, string>();
+            Estado4.Add("ident", "r5");
+            Estado4.Add("const", "r5");
+            Estado4.Add("class", "r5");
+            Estado4.Add("interface", "r5");
+            Estado4.Add("int", "r5");
+            Estado4.Add("double", "r5");
+            Estado4.Add("bool", "r5");
+            Estado4.Add("string", "r5");
+            Estado4.Add("void", "r5");
+            Estado4.Add("$/#", "r5");
+            Estados.Add(4, Estado4);
+
+            Dictionary<string, string> Estado5 = new Dictionary<string, string>();
+            Estado5.Add("int", "s19");
+            Estado5.Add("double", "s20");
+            Estado5.Add("bool", "s21");
+            Estado5.Add("string", "s22");
+            Estado5.Add("ConstType", "18");
+            Estados.Add(5, Estado5);
+
+            Dictionary<string, string> Estado6 = new Dictionary<string, string>();
+            Estado6.Add("ident", "s23");
+            Estados.Add(6, Estado6);
+
+            Dictionary<string, string> Estado7 = new Dictionary<string, string>();
+            Estado7.Add("ident", "s24");
+            Estados.Add(7, Estado7);
+
+            Dictionary<string, string> Estado8 = new Dictionary<string, string>();
+            Estado8.Add("ident", "r13");
+            Estado8.Add("[", "r13");
+            Estados.Add(8, Estado8);
+
+            Dictionary<string, string> Estado9 = new Dictionary<string, string>();
+            Estado9.Add("ident", "r14");
+            Estado9.Add("[", "r14");
+            Estados.Add(9, Estado9);
+
+            Dictionary<string, string> Estado10 = new Dictionary<string, string>();
+            Estado10.Add("ident", "r15");
+            Estado10.Add("[", "r15");
+            Estados.Add(10, Estado10);
+
+            Dictionary<string, string> Estado11 = new Dictionary<string, string>();
+            Estado11.Add("ident", "r16");
+            Estado11.Add("[", "r16");
+            Estados.Add(11, Estado11);
+
+            Dictionary<string, string> Estado12 = new Dictionary<string, string>();
+            Estado12.Add("ident", "r17");
+            Estado12.Add("[", "r17");
+            Estados.Add(12, Estado12);
+
+            Dictionary<string, string> Estado13 = new Dictionary<string, string>();
+            Estado13.Add("", "");
+            Estado13.Add("", "");
+            Estados.Add(13, Estado13);
+
+            Dictionary<string, string> Estado14 = new Dictionary<string, string>();
+            Estado14.Add("", "");
+            Estado14.Add("", "");
+            Estados.Add(14, Estado14);
+
+            Dictionary<string, string> Estado15 = new Dictionary<string, string>();
+            Estado15.Add("", "");
+            Estado15.Add("", "");
+            Estados.Add(15, Estado15);
+
+            Dictionary<string, string> Estado16 = new Dictionary<string, string>();
+            Estado16.Add("", "");
+            Estado16.Add("", "");
+            Estados.Add(16, Estado16);
+
+            Dictionary<string, string> Estado17 = new Dictionary<string, string>();
+            Estado17.Add("", "");
+            Estado17.Add("", "");
+            Estados.Add(17, Estado17);
+
+            Dictionary<string, string> Estado18 = new Dictionary<string, string>();
+            Estado18.Add("", "");
+            Estado18.Add("", "");
+            Estados.Add(18, Estado18);
+
+            Dictionary<string, string> Estado19 = new Dictionary<string, string>();
+            Estado19.Add("", "");
+            Estado19.Add("", "");
+            Estados.Add(19, Estado19);
+
+            Dictionary<string, string> Estado20 = new Dictionary<string, string>();
+            Estado20.Add("", "");
+            Estado20.Add("", "");
+            Estados.Add(20, Estado20);
+
+            Dictionary<string, string> Estado21 = new Dictionary<string, string>();
+            Estado21.Add("", "");
+            Estado21.Add("", "");
+            Estados.Add(21, Estado21);
+
+            Dictionary<string, string> Estado22 = new Dictionary<string, string>();
+            Estado22.Add("", "");
+            Estado22.Add("", "");
+            Estados.Add(22, Estado22);
+
+            Dictionary<string, string> Estado23 = new Dictionary<string, string>();
+            Estado23.Add("", "");
+            Estado23.Add("", "");
+            Estados.Add(23, Estado23);
+
+            Dictionary<string, string> Estado24 = new Dictionary<string, string>();
+            Estado24.Add("", "");
+            Estado24.Add("", "");
+            Estados.Add(24, Estado24);
 
             PilaEstados.Push("0");
         }
@@ -598,7 +729,6 @@ namespace minic
         {
             Tokens.RemoveAt(0);
         }
-
         private Token CrearTokenEstado(string productor, int numLinea)
         {
             Token token = new Token("Estado", productor, numLinea);
