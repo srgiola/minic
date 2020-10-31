@@ -541,65 +541,290 @@ namespace minic
             Estados.Add(12, Estado12);
 
             Dictionary<string, string> Estado13 = new Dictionary<string, string>();
-            Estado13.Add("", "");
-            Estado13.Add("", "");
+            Estado13.Add("ident", "s25");
             Estados.Add(13, Estado13);
 
             Dictionary<string, string> Estado14 = new Dictionary<string, string>();
-            Estado14.Add("", "");
-            Estado14.Add("", "");
+            Estado14.Add("&/#", "r1");
             Estados.Add(14, Estado14);
 
             Dictionary<string, string> Estado15 = new Dictionary<string, string>();
-            Estado15.Add("", "");
-            Estado15.Add("", "");
+            Estado15.Add("ident", "s12");
+            Estado15.Add("const", "s5");
+            Estado15.Add("class", "s6");
+            Estado15.Add("interface", "s7");
+            Estado15.Add("int", "s8");
+            Estado15.Add("double", "s9");
+            Estado15.Add("bool", "s10");
+            Estado15.Add("string", "s11");
+            Estado15.Add("void", "s13");
+            Estado15.Add("$/#", "r3");
+            Estado15.Add("Decl'", "26");
+            Estado15.Add("Decl", "15");
+            Estado15.Add("Type", "3");
+            Estado15.Add("FunctionDecl", "4");
             Estados.Add(15, Estado15);
-
+            
             Dictionary<string, string> Estado16 = new Dictionary<string, string>();
-            Estado16.Add("", "");
-            Estado16.Add("", "");
+            Estado16.Add(";", "s27");
+            Estado16.Add("(", "s28");
             Estados.Add(16, Estado16);
 
             Dictionary<string, string> Estado17 = new Dictionary<string, string>();
-            Estado17.Add("", "");
-            Estado17.Add("", "");
+            Estado17.Add("]", "s29");
             Estados.Add(17, Estado17);
 
             Dictionary<string, string> Estado18 = new Dictionary<string, string>();
-            Estado18.Add("", "");
-            Estado18.Add("", "");
+            Estado18.Add("ident", "s30");
             Estados.Add(18, Estado18);
 
             Dictionary<string, string> Estado19 = new Dictionary<string, string>();
-            Estado19.Add("", "");
-            Estado19.Add("", "");
+            Estado19.Add("ident", "r9");
             Estados.Add(19, Estado19);
 
             Dictionary<string, string> Estado20 = new Dictionary<string, string>();
-            Estado20.Add("", "");
-            Estado20.Add("", "");
+            Estado20.Add("ident", "r10");
             Estados.Add(20, Estado20);
 
             Dictionary<string, string> Estado21 = new Dictionary<string, string>();
-            Estado21.Add("", "");
-            Estado21.Add("", "");
+            Estado21.Add("ident", "r11");
             Estados.Add(21, Estado21);
 
             Dictionary<string, string> Estado22 = new Dictionary<string, string>();
-            Estado22.Add("", "");
-            Estado22.Add("", "");
+            Estado22.Add("ident", "r12");
             Estados.Add(22, Estado22);
 
             Dictionary<string, string> Estado23 = new Dictionary<string, string>();
-            Estado23.Add("", "");
-            Estado23.Add("", "");
+            Estado23.Add("ident", "r24");
+            Estado23.Add("const", "r24");
+            Estado23.Add("class", "r24");
+            Estado23.Add("{", "r24");
+            Estado23.Add("interface", "r24");
+            Estado23.Add("int", "r24");
+            Estado23.Add("double", "r24");
+            Estado23.Add("bool", "r24");
+            Estado23.Add("string", "r24");
+            Estado23.Add("void", "r24");
+            Estado23.Add(",", "r24");
+            Estado23.Add(":", "s32");
+            Estado23.Add("$/#", "r24");
+            Estado23.Add("ident'", "31");
             Estados.Add(23, Estado23);
 
             Dictionary<string, string> Estado24 = new Dictionary<string, string>();
-            Estado24.Add("", "");
-            Estado24.Add("", "");
+            Estado24.Add("{", "s33");
             Estados.Add(24, Estado24);
 
+            Dictionary<string, string> Estado25 = new Dictionary<string, string>();
+            Estado25.Add("(", "s34");
+            Estados.Add(25, Estado25);
+
+            Dictionary<string, string> Estado26 = new Dictionary<string, string>();
+            Estado26.Add("$/#", "r2");
+            Estados.Add(26, Estado26);
+
+            Dictionary<string, string> Estado27 = new Dictionary<string, string>();
+            Estado27.Add("ident", "r4");
+            Estado27.Add("const", "r4");
+            Estado27.Add("class", "r4");
+            Estado27.Add("interface", "r4");
+            Estado27.Add("int", "r4");
+            Estado27.Add("double", "r4");
+            Estado27.Add("bool", "r4");
+            Estado27.Add("string", "r4");
+            Estado27.Add("void", "r4");
+            Estado27.Add("$/#", "r4");
+            Estados.Add(27, Estado27);
+
+            Dictionary<string, string> Estado28 = new Dictionary<string, string>();
+            Estado28.Add("ident", "s12");
+            Estado28.Add("int", "s8");
+            Estado28.Add("double", "s9");
+            Estado28.Add("bool", "s10");
+            Estado28.Add("string", "s11");
+            Estado28.Add("Type", "36");
+            Estado28.Add("Formals", "35");
+            Estados.Add(28, Estado28);
+
+            Dictionary<string, string> Estado29 = new Dictionary<string, string>();
+            Estado29.Add("ident", "r18");
+            Estado29.Add("[", "r18");
+            Estados.Add(29, Estado29);
+
+            Dictionary<string, string> Estado30 = new Dictionary<string, string>();
+            Estado30.Add(";", "s37");
+            Estados.Add(30, Estado30);
+
+            Dictionary<string, string> Estado31 = new Dictionary<string, string>();
+            Estado31.Add("{", "r26");
+            Estado31.Add(",", "s39");
+            Estado31.Add("id", "38");
+            Estados.Add(31, Estado31);
+
+            Dictionary<string, string> Estado32 = new Dictionary<string, string>();
+            Estado32.Add("ident", "s40");
+            Estados.Add(32, Estado32);
+
+            Dictionary<string, string> Estado33 = new Dictionary<string, string>();
+            Estado33.Add("ident", "s12");
+            Estado33.Add("}", "r35");
+            Estado33.Add("int", "s8");
+            Estado33.Add("double", "s9");
+            Estado33.Add("bool", "s10");
+            Estado33.Add("string", "s11");
+            Estado33.Add("void", "s44");
+            Estado33.Add("Type", "43");
+            Estado33.Add("Prototype'", "41");
+            Estado33.Add("Prototype", "42");
+            Estados.Add(33, Estado33);
+
+            Dictionary<string, string> Estado34 = new Dictionary<string, string>();
+            Estado34.Add("ident", "s12");
+            Estado34.Add("int", "s8");
+            Estado34.Add("double", "s9");
+            Estado34.Add("bool", "s10");
+            Estado34.Add("string", "s11");
+            Estado34.Add("Type", "s36");
+            Estado34.Add("Formals", "45");
+            Estados.Add(34, Estado34);
+
+            Dictionary<string, string> Estado35 = new Dictionary<string, string>();
+            Estado35.Add(")", "s46");
+            Estados.Add(35, Estado35);
+
+            Dictionary<string, string> Estado36 = new Dictionary<string, string>();
+            Estado36.Add("ident", "s47");
+            Estado36.Add("[", "s17");
+            Estados.Add(36, Estado36);
+
+            Dictionary<string, string> Estado37 = new Dictionary<string, string>();
+            Estado37.Add("ident", "r6");
+            Estado37.Add("const", "r6");
+            Estado37.Add("class", "r6");
+            Estado37.Add("interface", "r6");
+            Estado37.Add("int", "r6");
+            Estado37.Add("double", "r6");
+            Estado37.Add("bool", "r6");
+            Estado37.Add("string", "r6");
+            Estado37.Add("void", "r6");
+            Estado37.Add("$/#", "r6");
+            Estados.Add(37, Estado37);
+
+            Dictionary<string, string> Estado38 = new Dictionary<string, string>();
+            Estado38.Add("{", "s48");
+            Estados.Add(38, Estado38);
+
+            Dictionary<string, string> Estado39 = new Dictionary<string, string>();
+            Estado39.Add("ident", "s49");
+            Estados.Add(39, Estado39);
+
+            Dictionary<string, string> Estado40 = new Dictionary<string, string>();
+            Estado40.Add("ident", "r23");
+            Estado40.Add("const", "r23");
+            Estado40.Add("class", "r23");
+            Estado40.Add("{", "r23");
+            Estado40.Add("interface", "r23");
+            Estado40.Add("int", "r23");
+            Estado40.Add("double", "r23");
+            Estado40.Add("bool", "r23");
+            Estado40.Add("string", "r23");
+            Estado40.Add("void", "r23");
+            Estado40.Add(",", "r23");
+            Estado40.Add("$/#", "r23");
+            Estados.Add(40, Estado40);
+
+            Dictionary<string, string> Estado41 = new Dictionary<string, string>();
+            Estado41.Add("}", "s50");
+            Estados.Add(41, Estado41);
+
+            Dictionary<string, string> Estado42 = new Dictionary<string, string>();
+            Estado42.Add("}", "r34");
+            Estados.Add(42, Estado42);
+
+            Dictionary<string, string> Estado43 = new Dictionary<string, string>();
+            Estado43.Add("ident", "s51");
+            Estado43.Add("[", "s17");
+            Estados.Add(43, Estado43);
+
+            Dictionary<string, string> Estado44 = new Dictionary<string, string>();
+            Estado44.Add("ident", "s52");
+            Estados.Add(44, Estado44);
+
+            Dictionary<string, string> Estado45 = new Dictionary<string, string>();
+            Estado45.Add(")", "s53");
+            Estados.Add(45, Estado45);
+
+            Dictionary<string, string> Estado46 = new Dictionary<string, string>();
+            Estado46.Add("{", "s55");
+            Estado46.Add("StmtBlock", "54");
+            Estados.Add(46, Estado46);
+
+            Dictionary<string, string> Estado47 = new Dictionary<string, string>();
+            Estado47.Add(")", "r22");
+            Estado47.Add(",", "s56");
+            Estados.Add(47, Estado47);
+
+            Dictionary<string, string> Estado48 = new Dictionary<string, string>();
+            Estado48.Add("ident", "s12");
+            Estado48.Add("const", "s61");
+            Estado48.Add("}", "r30");
+            Estado48.Add("int", "s8");
+            Estado48.Add("double", "s9");
+            Estado48.Add("bool", "s10");
+            Estado48.Add("string", "s11");
+            Estado48.Add("void", "s13");
+            Estado48.Add("Type", "59");
+            Estado48.Add("FunctionDecl", "60");
+            Estado48.Add("Field'", "57");
+            Estado48.Add("Field", "58");
+            Estados.Add(48, Estado48);
+
+            Dictionary<string, string> Estado49 = new Dictionary<string, string>();
+            Estado49.Add("ident", "s63");
+            Estado49.Add(",", "r28");
+            Estado49.Add("id'", "62");
+            Estados.Add(49, Estado49);
+
+            Dictionary<string, string> Estado50 = new Dictionary<string, string>();
+            Estado50.Add("ident", "r8");
+            Estado50.Add("const", "r8");
+            Estado50.Add("class", "r8");
+            Estado50.Add("interface", "r8");
+            Estado50.Add("int", "r8");
+            Estado50.Add("double", "r8");
+            Estado50.Add("bool", "r8");
+            Estado50.Add("string", "r8");
+            Estado50.Add("void", "r8");
+            Estado50.Add("$/#", "r8");
+            Estados.Add(50, Estado50);
+
+            Dictionary<string, string> Estado51 = new Dictionary<string, string>();
+            Estado51.Add("(", "s64");
+            Estados.Add(51, Estado51);
+
+            Dictionary<string, string> Estado52 = new Dictionary<string, string>();
+            Estado52.Add("(", "s65");
+            Estados.Add(52, Estado52);
+
+            Dictionary<string, string> Estado53 = new Dictionary<string, string>();
+            Estado53.Add("{", "s55");
+            Estado53.Add("StmtBlock", "66");
+            Estados.Add(53, Estado53);
+
+            Dictionary<string, string> Estado54 = new Dictionary<string, string>();
+            Estado54.Add("ident", "r19");
+            Estado54.Add("const", "r19");
+            Estado54.Add("class", "r19");
+            Estado54.Add("}", "r19");
+            Estado54.Add("interface", "r19");
+            Estado54.Add("int", "r19");
+            Estado54.Add("double", "r19");
+            Estado54.Add("bool", "r19");
+            Estado54.Add("string", "r19");
+            Estado54.Add("void", "r19");
+            Estado54.Add("$/#", "r19");
+            Estados.Add(54, Estado54);
+                    
             PilaEstados.Push("0");
         }
 
