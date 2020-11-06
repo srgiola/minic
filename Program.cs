@@ -31,20 +31,7 @@ namespace minic
 
 				//AnalizadorSintactico ASintactivo = new AnalizadorSintactico(Tokens);
 
-				//SLR SLR = new SLR(Tokens);
-				List<Token> Tokens2 = new List<Token>();
-				Token t0 = new Token("PR", "id", 4);
-				Token t1 = new Token("PR", "+", 4);
-				Token t2 = new Token("PR", "id", 4);
-				Token t3 = new Token("PR", "*", 4);
-				Token t4 = new Token("PR", "id", 4);
-				Tokens2.Add(t0);
-				Tokens2.Add(t1);
-				Tokens2.Add(t2);
-				Tokens2.Add(t3);
-				Tokens2.Add(t4);
-
-				SLR SLR = new SLR(Tokens2);
+				SLR SLR = new SLR(Tokens);
 				SLR.Iniciar();
 			}
 			Console.ReadKey();

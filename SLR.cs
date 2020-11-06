@@ -14,6 +14,7 @@ namespace minic
         Stack<string> PilaEstados = new Stack<string>();
         Stack<Token> PilaTokens = new Stack<Token>();
         Dictionary<int, Dictionary<string, string>> Estados = new Dictionary<int, Dictionary<string, string>>();
+        int linea = 0;
         //TKey = Numero estado
         //TValue = Dicionario con  TKey = Simbolo/Goto, TValue = acción
 
@@ -162,8 +163,8 @@ namespace minic
             Producción P33 = new Producción(33, 4, "Field", Simbolos33);
             Producciones.Add(P33);
 
-            string[] Simbolos34 = new string[] { "Prototype" };
-            Producción P34 = new Producción(34, 1, "Prototype'", Simbolos34);
+            string[] Simbolos34 = new string[] { "Prototype", "Prototype'" };
+            Producción P34 = new Producción(34, 2, "Prototype'", Simbolos34);
             Producciones.Add(P34);
 
             string[] Simbolos35 = new string[] { "" };
@@ -3944,6 +3945,7 @@ namespace minic
                 if (AuxBool)
                 {
                     Token token_actual = Tokens[0];
+                    linea = token_actual.numLinea;
                     string action = "";
 
                     AuxBool = AuxDicc.TryGetValue(StrToken(token_actual), out action);
@@ -3999,7 +4001,7 @@ namespace minic
                                 estado_Actual = int.Parse(estado_cargar);
                                 break;
 
-                            case "/ACC": // Aceptacion
+                            case "#ACC": // Aceptacion
                                 Console.WriteLine("Codigo Aceptado");
                                 aceptar = true;
                                 break;
@@ -4011,7 +4013,7 @@ namespace minic
                     }
                     else
                     {
-                        Console.WriteLine("Error, no se encontro transición");
+                        Console.WriteLine("Error en linea " + linea + " se esperaba [" + StrToken(token_actual) + "]");
                         aceptar = true;
                         break;
                     }
@@ -4032,8 +4034,8 @@ namespace minic
                 return "D"; //Desplazamiento
             else
             {
-                if (action == "/ACC")
-                    return "/ACC";
+                if (action == "#ACC")
+                    return "#ACC";
                 else
                     return "N"; //Ir_A
             }
