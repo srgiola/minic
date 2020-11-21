@@ -28,5 +28,47 @@ namespace minic
 			typeConst = _typeConst;
 			numLinea = _numLinea;
 		}
+
+		public ObjetoTS crearTS(Token Tk) //Crea aquellos token que llevan esas PR
+		{
+			ObjetoTS OTS = new ObjetoTS();
+			string[] t = new string[] { "int", "double", "bool", "string" };
+			List<string> tipos = new List<string>(t);
+			if (Tk.type == "PR" && tipos.Contains(Tk.content))
+			{
+				OTS.tipo = Tk.content;
+				OTS.caso = 0;
+				return OTS;
+			}
+			else if (Tk.type == "PR" && Tk.content == "void")
+			{
+				OTS.tipo = Tk.content;
+				OTS.caso = 1;
+				return OTS;
+			}
+			else if (Tk.type == "PR" && Tk.content == "class")
+			{
+				OTS.tipo = Tk.content;
+				OTS.caso = 2;
+				return OTS;
+			}
+			else if (Tk.type == "PR" && Tk.content == "interface")
+			{
+				OTS.tipo = Tk.content;
+				OTS.caso = 3;
+				return OTS;
+			}
+			else
+				return null;
+		}
+
+		public string identOTS(Token TK)
+		{
+			if (TK.type == "Identificador" || TK.content == "[]")
+				return TK.content;
+			else
+				return null;
+		}
+
 	}
 }

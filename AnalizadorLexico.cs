@@ -33,7 +33,7 @@ namespace minic
 		//	6.3)Matematicos				Se reconosen como error 8) y luego se identifican como Operador en getTypeToken(string)
 		//7)Error */					([*][/])
 		//8)Caracteres de Error			((\p{P}){1}|(\p{S}){1})
-		Regex ER = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))*"")|(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)([+]|[-])?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
+		Regex ER = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S})|(\p{Nd})|[0-9])*"")|(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)([+]|[-])?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
 		
 		//Constructor
 		public AnalizadorLexico(string fileName, string pathFile, string pathDirectory)
@@ -112,6 +112,18 @@ namespace minic
 								{
 									matchRgx = caracter61 + matchRgx;
 								}
+
+								//if (matchRgx == "“")
+								//{
+								//	while (matchRgx != "\"")
+								//	{
+								//		match = match.NextMatch();
+								//		matchRgx += linea.Substring(match.Index, match.Length);
+								//	}
+								//	matchRgx += "\"";
+								//	Token Token2 = new Token("Constante", matchRgx, numLinea, "S");
+								//	goto nextMatch;
+								//}
 
 								//string tmpComillas = matchRgx.Replace(" ", "");
 								//if (tmpComillas.Length == 3 && tmpComillas[1] == '"' && tmpComillas[2] == '"') //Entra cuando viene un operador seguido por un par de comillas 
@@ -264,7 +276,7 @@ namespace minic
 			Regex rgx23 = new Regex(@"^([0-9]+[.][0-9]*)$");
 			Regex rgx24 = new Regex(@"^([0-9]+)$");
 			Regex rgx3 = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))+)");
-			Regex rgx4 = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))+"")");
+			Regex rgx4 = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S})|(\p{Nd})|[0-9])+"")");
 			Regex rgx5 = new Regex(@"([a-zA-Z]([\w]|[_])*)");
 			Regex rgx6 = new Regex(@"(<=|>=|==|!=|&&|[||])");
 

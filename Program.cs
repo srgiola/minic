@@ -29,8 +29,12 @@ namespace minic
 
 				//AnalizadorSintactico ASintactivo = new AnalizadorSintactico(Tokens);
 
-				SLR SLR = new SLR(Tokens);
-				SLR.Iniciar();
+				//SLR SLR = new SLR(Tokens);
+				//SLR.Iniciar();
+
+				TS TS = new TS(Tokens);
+				TS.Iniciar();
+				TS.pritTS(pathDirectory);
 			}
 			Console.ReadKey();
 		}
