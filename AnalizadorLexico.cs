@@ -34,10 +34,11 @@ namespace minic
 		//7)Error */					([*][/])
 		//8)Caracteres de Error			((\p{P}){1}|(\p{S}){1})
 		Regex ER = new Regex(@"(""((\w)|(\s)|(\p{P})|(\p{S}))*"")|(//((\w)|(\s)|(\p{P})|(\p{S}))+)|(([0-9]+[.][0-9]*(E|e)([+]|[-])?[0-9]+)|(0(x|X)([0-9]|[a-fA-F])+)|([0-9]+[.][0-9]*)|([0-9]+))|(""((\w)|(\s)|(\p{P})|(\p{S}))+)|([a-zA-Z](([\w]|[_])*))|(<=|>=|==|!=|&&|[||]|([*][/]))|((\p{P}){1}|(\p{S}){1})");
-
+		
 		//Constructor
 		public AnalizadorLexico(string fileName, string pathFile, string pathDirectory)
 		{
+			
 			this.fileName = fileName;
 			this.pathFile = pathFile;
 			this.pathDirectory = pathDirectory;

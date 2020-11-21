@@ -6,11 +6,9 @@ namespace minic
 {
 	class Program
 	{
-		static void Main(string[] args)
-		{
-			//Falta generar EXE
-			// y comentarios multilinea
 
+        static void Main(string[] args)
+		{
 			List<Token> Tokens;
 
 			Console.WriteLine("Arrastre su archivo a la consola");
