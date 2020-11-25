@@ -18,6 +18,8 @@ namespace minic
         {
             CrearOTS();
             CrearOTS2();
+            asignaciones();
+            //Analizar();
         }
 
         void CrearOTS() //Se realiza una primera leida de los tokens
@@ -154,10 +156,49 @@ namespace minic
                 var item = Tokens2[i];
                 ObjetoTS OTS = new ObjetoTS();
                 OTS.ident = Tokens2[i].identOTS(Tokens2[i]);
-                if (ExisteOTS(Tokens2[i]) && OTS.ident != null)
+
+                if (Tokens2[i].content == "class")
+                    i++;
+                else if (Tokens2[i].content == "interface")
+                    i++;
+                else if (ExisteOTS(Tokens2[i]) && OTS.ident != null)
                 {
-                    
+                    string tmp = OTS.ident;
+                    i++;
+                    OTS.ident = Tokens2[i].content;
+                    OTS.tipo = tmp;
+                    i++;
+                    LTS.Add(OTS);
                 }
+                
+            }
+        }
+        void asignaciones()
+        {
+            var Tokens2 = Tokens;
+            for (int i = 0; i < Tokens2.Count; i++)
+            {
+                string[] ignorar = new string[] { "int", "bool", "double", "string", "interface", "class", "void"};
+                var ltpm = new List<string>(ignorar);
+                if (ltpm.Contains(Tokens2[i].content))
+                    i++;
+                else
+                {
+                    if (Tokens2[i].type == "Identificador" && Tokens2[i + 1].content == "=")
+                    {
+                        var tmpident = Tokens2[i];
+                        i += 2;
+                        while (Tokens2[i].content != ";")
+                        {
+                            string tipo = getTipo(tmpident);
+                            if (tipo == "int")
+                            {
+                            }
+                            i++;
+                        }
+                    }
+                }
+
             }
         }
 
@@ -166,7 +207,7 @@ namespace minic
             ObjetoTS OTS = new ObjetoTS();
             ObjetoTS tmp = new ObjetoTS();
             //PRIMERO SE REVISA SI EXISTE EN ATRIBUTOS
-            var LTSA = LTS.Find(x => (x.tipo == "class" && x.ident == tk.content) || (x.tipo == "inteface" && x.ident == tk.content));
+            var LTSA = LTS.Find(x => (x.tipo == "class" && x.ident == tk.content) || (x.tipo == "interface" && x.ident == tk.content));
 
             if (LTSA != null)
             {
@@ -174,6 +215,18 @@ namespace minic
             }
             else
                 return false;
+        }
+
+        string getTipo(Token tk)
+        {
+            ObjetoTS OTS = new ObjetoTS();
+            ObjetoTS tmp = new ObjetoTS();
+            //PRIMERO SE REVISA SI EXISTE EN ATRIBUTOS
+            var LTSA = LTS.Find(x => (x.tipo == "class" && x.ident == tk.content) || (x.tipo == "interface" && x.ident == tk.content));
+            if (LTSA != null)
+                return LTSA.tipo;
+            else
+                return null;
         }
 
         public void pritTS(string pathDirectory)
